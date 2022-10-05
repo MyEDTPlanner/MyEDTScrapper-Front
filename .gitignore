@@ -55,4 +55,4 @@ Temporary Items
 node_modules
 
 # Webpack
-dist/
+dist/*
