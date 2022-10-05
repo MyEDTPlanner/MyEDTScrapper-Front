@@ -1,0 +1,20 @@
+{
+  "name": "MyEDTScrapper",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/glichou/MyEDTScrapper.git",
+  "author": "Grégoire Lichou <22329645+glichou@users.noreply.github.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "commitlint": "^11.0.0",
+    "commitlint-plugin-gitmoji": "^2.2.0",
+    "husky": "^8.0.1",
+    "prettier": "^2.7.1"
+  },
+  "scripts": {
+    "prepare": "husky install",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+  }
+}
