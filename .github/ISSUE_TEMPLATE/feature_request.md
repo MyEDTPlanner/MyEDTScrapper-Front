@@ -1,8 +1,8 @@
 ---
-name: '\u2728 Feature request'
+name: "\u2728 Feature request"
 about: Suggest an idea for this project
-title: '\u2728 '
-labels: '\u2728 Enhancement'
+title: "\u2728 "
+labels: "\u2728 Enhancement"
 assignees: ''
 
 ---
