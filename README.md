@@ -16,12 +16,12 @@ cd MyEDTScrapper-Front
 
 Installer les dépendances
 ```bash
-yarn
+npm install
 ```
 
 Compiler les fichiers
 ```bash
-npm run build
+npm start
 ```
 
 Il ne reste plus qu'à ouvrir le fichier index.html avec un navigateur web pour accéder à l'interface.
