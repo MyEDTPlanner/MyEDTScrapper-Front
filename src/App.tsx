@@ -5,9 +5,7 @@ import './index.css'
 
 const App: FC = () => {
   return (
-    <div className="App">
-      <Calendar />
-    </div>
+    <Calendar />
   );
 }
 
