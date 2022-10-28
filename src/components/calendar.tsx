@@ -62,7 +62,7 @@ export default class Calendar extends React.Component<{}, CalendarState> {
                 slotMinTime: "08:00:00",
                 slotMaxTime: "17:00:00",
                 expandRows: true,
-                weekends: false,
+                //weekends: false,
                 //firstDay: 1,
                 slotLabelInterval: "00:30:00",
                 slotLabelFormat: { hour: "2-digit", minute: "2-digit", hour12: false },
@@ -84,12 +84,7 @@ export default class Calendar extends React.Component<{}, CalendarState> {
     return (
       <div className='app-sidebar'>
         <div className='app-sidebar-section'>
-          <h2>Instructions</h2>
-          <ul>
-            <li>Select dates and you will be prompted to create a new event</li>
-            <li>Drag, drop, and resize events</li>
-            <li>Click an event to delete it</li>
-          </ul>
+          <h2>MyEDTPlanner</h2>
         </div>
         <div className='app-sidebar-section'>
           <label>
@@ -98,11 +93,11 @@ export default class Calendar extends React.Component<{}, CalendarState> {
               checked={this.state.weekendsVisible}
               onChange={this.handleWeekendsToggle}
             ></input>
-            toggle weekends
+            Afficher les week-ends
           </label>
         </div>
         <div className='app-sidebar-section'>
-          <h2>All Events ({this.state.currentEvents.length})</h2>
+          <h2>Prochains examens ({this.state.currentEvents.length})</h2>
           <ul>
             {this.state.currentEvents.map(renderSidebarEvent)}
           </ul>
