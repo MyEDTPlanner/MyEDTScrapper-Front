@@ -1,38 +1,55 @@
-import React from 'react';
+import React from "react";
 
-import FullCalendar, { EventApi, DateSelectArg, EventClickArg, EventContentArg, formatDate } from '@fullcalendar/react'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import timeGridPlugin from '@fullcalendar/timegrid'
-import interactionPlugin from '@fullcalendar/interaction'
+import FullCalendar, {
+  EventApi,
+  DateSelectArg,
+  EventClickArg,
+  EventContentArg,
+  formatDate,
+} from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
 import frLocale from "@fullcalendar/core/locales/fr";
-import { INITIAL_EVENTS, createEventId } from '../utils/event-utils'
+import { INITIAL_EVENTS, createEventId } from "../utils/event-utils";
+import Modal from "./Modal";
 
 interface CalendarState {
-  weekendsVisible: boolean
-  currentEvents: EventApi[]
+  weekendsVisible: boolean;
+  currentEvents: EventApi[];
 }
 
 export default class Calendar extends React.Component<{}, CalendarState> {
 
+  handleClickBtnGroup(){
+
+  }
+
   state: CalendarState = {
     weekendsVisible: false,
-    currentEvents: []
-  }
+    currentEvents: [],
+  };
 
   render() {
     return (
-      <div className='app'>
+      <div className="app">
         {this.renderSidebar()}
-        <div className='app-main'>
+        <div className="app-main">
+          <Modal />
           <FullCalendar
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
+            plugins={[
+              dayGridPlugin,
+              timeGridPlugin,
+              interactionPlugin,
+              listPlugin,
+            ]}
             headerToolbar={{
-              left: 'prev,next today myCustomButton',
-              center: 'title',
-              right: 'customTimeGridWeek,listDay'
+              left: "prev,next today myCustomButton",
+              center: "title",
+              right: "customTimeGridWeek,listDay",
             }}
-            initialView='customTimeGridWeek'
+            initialView="customTimeGridWeek"
             customButtons={{
               myCustomButton: {
                 text: "Groupe",
@@ -65,7 +82,11 @@ export default class Calendar extends React.Component<{}, CalendarState> {
                 //weekends: false,
                 //firstDay: 1,
                 slotLabelInterval: "00:30:00",
-                slotLabelFormat: { hour: "2-digit", minute: "2-digit", hour12: false },
+                slotLabelFormat: {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: false,
+                },
                 nowIndicator: true,
               },
             }}
@@ -77,46 +98,44 @@ export default class Calendar extends React.Component<{}, CalendarState> {
           />
         </div>
       </div>
-    )
+    );
   }
 
   renderSidebar() {
     return (
-      <div className='app-sidebar'>
-        <div className='app-sidebar-section'>
+      <div className="app-sidebar">
+        <div className="app-sidebar-section">
           <h2>MyEDTPlanner</h2>
         </div>
-        <div className='app-sidebar-section'>
+        <div className="app-sidebar-section">
           <label>
             <input
-              type='checkbox'
+              type="checkbox"
               checked={this.state.weekendsVisible}
               onChange={this.handleWeekendsToggle}
             ></input>
             Afficher les week-ends
           </label>
         </div>
-        <div className='app-sidebar-section'>
+        <div className="app-sidebar-section">
           <h2>Prochains examens ({this.state.currentEvents.length})</h2>
-          <ul>
-            {this.state.currentEvents.map(renderSidebarEvent)}
-          </ul>
+          <ul>{this.state.currentEvents.map(renderSidebarEvent)}</ul>
         </div>
       </div>
-    )
+    );
   }
 
   handleWeekendsToggle = () => {
     this.setState({
-      weekendsVisible: !this.state.weekendsVisible
-    })
-  }
+      weekendsVisible: !this.state.weekendsVisible,
+    });
+  };
 
   handleDateSelect = (selectInfo: DateSelectArg) => {
-    let title = prompt('Please enter a new title for your event')
-    let calendarApi = selectInfo.view.calendar
+    let title = prompt("Please enter a new title for your event");
+    let calendarApi = selectInfo.view.calendar;
 
-    calendarApi.unselect() // clear date selection
+    calendarApi.unselect(); // clear date selection
 
     if (title) {
       calendarApi.addEvent({
@@ -124,23 +143,22 @@ export default class Calendar extends React.Component<{}, CalendarState> {
         title,
         start: selectInfo.startStr,
         end: selectInfo.endStr,
-        allDay: selectInfo.allDay
-      })
+        allDay: selectInfo.allDay,
+      });
     }
-  }
+  };
 
   handleEventClick = (clickInfo: EventClickArg) => {
     // if (alert(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
     //   clickInfo.event.remove()
     // }
-  }
+  };
 
   handleEvents = (events: EventApi[]) => {
     this.setState({
-      currentEvents: events
-    })
-  }
-
+      currentEvents: events,
+    });
+  };
 }
 
 function renderEventContent(eventContent: EventContentArg) {
@@ -149,14 +167,20 @@ function renderEventContent(eventContent: EventContentArg) {
       <b>{eventContent.timeText}</b>
       <i>{eventContent.event.title}</i>
     </>
-  )
+  );
 }
 
 function renderSidebarEvent(event: EventApi) {
   return (
     <li key={event.id}>
-      <b>{formatDate(event.start!, {year: 'numeric', month: 'short', day: 'numeric'})}</b>
+      <b>
+        {formatDate(event.start!, {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        })}
+      </b>
       <i>{event.title}</i>
     </li>
-  )
+  );
 }
