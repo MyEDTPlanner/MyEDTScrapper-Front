@@ -1,6 +1,6 @@
 # MyEDTScrapper-Front
 
-MyEDTPlanner est une suite de module permettant la récupération et l'affichage du planning des cours d'une classe de l'université d'Évry par la biais de scrapping du site (edt.univ-evry.fr)[https://edt.univ-evry.fr].
+MyEDTPlanner est une suite de module permettant la récupération et l'affichage du planning des cours d'une classe de l'université d'Évry par la biais de scrapping du site [https://edt.univ-evry.fr](edt.univ-evry.fr).
 
 ## Installation
 
