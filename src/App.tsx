@@ -5,7 +5,7 @@ import Calendar from "./components/calendar";
 import "./index.css";
 
 const App: FC = () => {
-  return <Calendar />;
+  return <Calendar />
 };
 
 export default App;

@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Dialog, { DialogProps } from "@mui/material/Dialog";
@@ -13,10 +13,19 @@ import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Switch from "@mui/material/Switch";
 
-export default function Modal() {
-  const [open, setOpen] = React.useState(false);
+interface ModalState {
+  useeState:bool  
+  isOpen: boolean;
+}
+
+export const Modal: React.FC<ModalState> = ({ isOpen = false }) => {
+  const [open, setOpen] = React.useState(isOpen);
   const [fullWidth, setFullWidth] = React.useState(true);
   const [maxWidth, setMaxWidth] = React.useState<DialogProps["maxWidth"]>("sm");
+
+  useEffect(() => {
+    console.log("La popup est : ", isOpen);
+  }, [isOpen]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -100,4 +109,4 @@ export default function Modal() {
       </Dialog>
     </React.Fragment>
   );
-}
+};

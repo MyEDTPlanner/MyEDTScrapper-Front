@@ -1,5 +1,4 @@
 import React from "react";
-
 import FullCalendar, {
   EventApi,
   DateSelectArg,
@@ -13,22 +12,35 @@ import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
 import frLocale from "@fullcalendar/core/locales/fr";
 import { INITIAL_EVENTS, createEventId } from "../utils/event-utils";
-import Modal from "./Modal";
+import { Modal } from "./Modal";
 
 interface CalendarState {
   weekendsVisible: boolean;
   currentEvents: EventApi[];
+  open: boolean;
+  fullWidth: boolean;
+  maxWidth: string;
 }
 
 export default class Calendar extends React.Component<{}, CalendarState> {
-
-  handleClickBtnGroup(){
-
-  }
-
   state: CalendarState = {
     weekendsVisible: false,
     currentEvents: [],
+    open: false,
+    fullWidth: false,
+    maxWidth: "sm",
+  };
+
+  handleClickBtnGroup = () => {
+    console.log("Bouton groupe cliqué");
+    this.setState({ open: true });
+  };
+
+  fullCalendarButtons = {
+    selectGroup: {
+      text: "Groupe",
+      click: this.handleClickBtnGroup,
+    },
   };
 
   render() {
@@ -36,7 +48,6 @@ export default class Calendar extends React.Component<{}, CalendarState> {
       <div className="app">
         {this.renderSidebar()}
         <div className="app-main">
-          <Modal />
           <FullCalendar
             plugins={[
               dayGridPlugin,
@@ -45,19 +56,12 @@ export default class Calendar extends React.Component<{}, CalendarState> {
               listPlugin,
             ]}
             headerToolbar={{
-              left: "prev,next today myCustomButton",
+              left: "prev,next today selectGroup",
               center: "title",
               right: "customTimeGridWeek,listDay",
             }}
             initialView="customTimeGridWeek"
-            customButtons={{
-              myCustomButton: {
-                text: "Groupe",
-                click: function () {
-                  alert("clicked the custom button!");
-                },
-              },
-            }}
+            customButtons={this.fullCalendarButtons}
             navLinks={true}
             locales={[frLocale]}
             locale="fr"
@@ -96,6 +100,7 @@ export default class Calendar extends React.Component<{}, CalendarState> {
             eventRemove={function(){}}
             */
           />
+          <Modal isOpen={this.state.open} />
         </div>
       </div>
     );
