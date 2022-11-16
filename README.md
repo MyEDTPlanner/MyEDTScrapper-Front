@@ -25,3 +25,7 @@ npm start
 ```
 
 Il ne reste plus qu'à ouvrir le fichier index.html avec un navigateur web pour accéder à l'interface.
+
+## License
+
+Ce projet est sous la licence GNU GPL V3 - voir le fichier [license](https://github.com/MyEDTPlanner/MyEDTScrapper-Front/blob/14-ajout-dune-licence/License) pour plus de détails.
