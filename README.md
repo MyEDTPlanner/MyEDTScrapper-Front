@@ -25,6 +25,10 @@ npm start
 ```
 
 Il ne reste plus qu'à ouvrir le fichier index.html avec un navigateur web pour accéder à l'interface.
+## Contribution
+
+Merci de lire les fichiers :
+* [CODE-OF-CONDUCT](https://github.com/MyEDTPlanner/MyEDTScrapper-Front/blob/19-ajout-dun-code-de-conduite/CODE-OF-CONDUCT.md)
 
 ## License
 
