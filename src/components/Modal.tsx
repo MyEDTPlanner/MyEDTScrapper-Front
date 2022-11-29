@@ -25,7 +25,7 @@ export const Modal: React.FC<ModalState> = ({
   // const [open, setOpen] = React.useState(isOpen);
   const [fullWidth, setFullWidth] = React.useState(true);
   const [maxWidth, setMaxWidth] = React.useState<DialogProps["maxWidth"]>("sm");
-  const [groupList, setGroupList] = React.useState<String[]>([]);
+  const [groupList, setGroupList] = React.useState<string[]>([]);
   // useEffect(() => {
   //   console.log("La popup est : ", isOpen);
   //   setOpen(isOpen);
@@ -47,15 +47,17 @@ export const Modal: React.FC<ModalState> = ({
   ) => {
     setFullWidth(event.target.checked);
   };
-  groupList.push("test");
+
   const recupGroupFromApi = () => {
-    fetch("http://192.168.194.115:2001/refresh-groups")
+    fetch("http://localhost:2001/refresh-groups")
       .then((response) => response.json())
-      //.then((data) => console.log(data))
-      .then((data) => setGroupList(data.result))
-      .then((data) => console.log(data.result));
+        .then((data) => {
+          setGroupList(data.result)
+          console.log(data.result)
+        });
   };
-  //const fakeList : string[]=[];
+
+  const fakeList: string[] =[];
   recupGroupFromApi();
   return (
     <React.Fragment>
@@ -95,9 +97,11 @@ export const Modal: React.FC<ModalState> = ({
                   id: "max-width",
                 }}
               >
-                {groupList?.map((groupe) => {
-                  return <MenuItem value={groupe}>{groupe}</MenuItem>;
-                })}
+                {
+                  groupList && groupList.map((groupe: string) => {
+                    return (<MenuItem value={groupe}>{groupe}</MenuItem>);
+                  })
+                }
                 <MenuItem value={false as any}>false</MenuItem>
                 <MenuItem value="xs">xs</MenuItem>
                 <MenuItem value="sm">sm</MenuItem>
