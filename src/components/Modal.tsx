@@ -18,10 +18,14 @@ interface ModalState {
   handleClose: () => void;
 }
 
-export const Modal: React.FC<ModalState> = ({ isOpen = false, handleClose }) => {
+export const Modal: React.FC<ModalState> = ({
+  isOpen = false,
+  handleClose,
+}) => {
   // const [open, setOpen] = React.useState(isOpen);
   const [fullWidth, setFullWidth] = React.useState(true);
   const [maxWidth, setMaxWidth] = React.useState<DialogProps["maxWidth"]>("sm");
+  const [groupList, setGroupList] = React.useState<String>([]);
 
   // useEffect(() => {
   //   console.log("La popup est : ", isOpen);
@@ -31,8 +35,6 @@ export const Modal: React.FC<ModalState> = ({ isOpen = false, handleClose }) => 
   // useEffect(() => {
   //   console.log("La popup est : ", open);
   // }, [open]);
-
-  
 
   const handleMaxWidthChange = (event: SelectChangeEvent<typeof maxWidth>) => {
     setMaxWidth(
@@ -47,6 +49,13 @@ export const Modal: React.FC<ModalState> = ({ isOpen = false, handleClose }) => 
     setFullWidth(event.target.checked);
   };
 
+  const recupGroupFromApi = () => {
+    fetch("http://192.168.194.115:2001/refresh-groups")
+      .then((response) => response.json())
+      //.then((data) => console.log(data))
+      .then((data) => setGroupList(data.result));
+  };
+  recupGroupFromApi();
   return (
     <React.Fragment>
       {/* <Button variant="outlined" onClick={handleClickOpen}>
@@ -58,10 +67,10 @@ export const Modal: React.FC<ModalState> = ({ isOpen = false, handleClose }) => 
         open={isOpen}
         onClose={handleClose}
       >
-        <DialogTitle>Choisis ta taille !</DialogTitle>
+        <DialogTitle>choisissez votre groupe ici!</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            You can set my maximum width and whether to adapt or not.
+            Selectionez un groupe parmis la liste.
           </DialogContentText>
           <Box
             noValidate
