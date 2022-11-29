@@ -36,6 +36,10 @@ export default class Calendar extends React.Component<{}, CalendarState> {
     this.setState({ open: true });
   };
 
+  handleClose = () => {
+    this.setState({ open: false });
+  };
+
   fullCalendarButtons = {
     selectGroup: {
       text: "Groupe",
@@ -100,7 +104,7 @@ export default class Calendar extends React.Component<{}, CalendarState> {
             eventRemove={function(){}}
             */
           />
-          <Modal isOpen={this.state.open} />
+          <Modal isOpen={this.state.open} handleClose={this.handleClose}/>
         </div>
       </div>
     );

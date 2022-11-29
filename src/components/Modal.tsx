@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Dialog, { DialogProps } from "@mui/material/Dialog";
@@ -14,26 +14,25 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Switch from "@mui/material/Switch";
 
 interface ModalState {
-  useeState:bool  
   isOpen: boolean;
+  handleClose: () => void;
 }
 
-export const Modal: React.FC<ModalState> = ({ isOpen = false }) => {
-  const [open, setOpen] = React.useState(isOpen);
+export const Modal: React.FC<ModalState> = ({ isOpen = false, handleClose }) => {
+  // const [open, setOpen] = React.useState(isOpen);
   const [fullWidth, setFullWidth] = React.useState(true);
   const [maxWidth, setMaxWidth] = React.useState<DialogProps["maxWidth"]>("sm");
 
-  useEffect(() => {
-    console.log("La popup est : ", isOpen);
-  }, [isOpen]);
+  // useEffect(() => {
+  //   console.log("La popup est : ", isOpen);
+  //   setOpen(isOpen);
+  // }, [isOpen]);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  // useEffect(() => {
+  //   console.log("La popup est : ", open);
+  // }, [open]);
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  
 
   const handleMaxWidthChange = (event: SelectChangeEvent<typeof maxWidth>) => {
     setMaxWidth(
@@ -56,7 +55,7 @@ export const Modal: React.FC<ModalState> = ({ isOpen = false }) => {
       <Dialog
         fullWidth={fullWidth}
         maxWidth={maxWidth}
-        open={open}
+        open={isOpen}
         onClose={handleClose}
       >
         <DialogTitle>Choisis ta taille !</DialogTitle>
