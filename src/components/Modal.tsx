@@ -43,13 +43,6 @@ export const Modal: React.FC<ModalState> = ({
       event.target.value
     );
   };**/
-  const handleSelectedGroupChange = (event: SelectChangeEvent<typeof selectedGroup>) => {
-    setSelectedGroup(
-      // @ts-expect-error autofill of arbitrary value is not handled.
-      event.target.value
-    );
-  };
-
   return (
     <React.Fragment>
       {/* <Button variant="outlined" onClick={handleClickOpen}>
@@ -62,10 +55,12 @@ export const Modal: React.FC<ModalState> = ({
         onClose={handleClose}
       >
         <DialogTitle>Groupe</DialogTitle>
+        
         <DialogContent>
           <DialogContentText>
             Selectionez votre groupe parmis la liste.
           </DialogContentText>
+        
           <Box
             noValidate
             component="form"
@@ -77,29 +72,13 @@ export const Modal: React.FC<ModalState> = ({
             }}
           >
             <FormControl sx={{ mt: 2, minWidth: 120 }}>
-              <InputLabel htmlFor="group-select">Groupe</InputLabel>
-              <Select
-                autoFocus
-                value={selectedGroup}
-                onChange={handleSelectedGroupChange}
-                label="group-select"
-                inputProps={{
-                  name: "group-select",
-                  id: "group-select",
-                }}
-              >
-                {
-                  list && list.map((groupe: string, index: number) => {
-                    return (<MenuItem key={index} value={groupe}>{groupe}</MenuItem>);
-                  })
-                }
-              </Select>
               <Autocomplete
                 disablePortal
                 id="combo-box-demo"
                 options={list}
                 sx={{ width: 300 }}
-                renderInput={(params) => <TextField {...params} label="Movie" />}
+                noOptionsText="Aucun groupe correspondant"
+                renderInput={(params) => <TextField {...params}  label="Groupe" />}
               />
             </FormControl>
           </Box>
