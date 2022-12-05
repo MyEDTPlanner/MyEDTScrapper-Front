@@ -20,6 +20,7 @@ interface CalendarState {
   open: boolean;
   fullWidth: boolean;
   maxWidth: string;
+  groupList: string[];
 }
 
 export default class Calendar extends React.Component<{}, CalendarState> {
@@ -29,6 +30,7 @@ export default class Calendar extends React.Component<{}, CalendarState> {
     open: false,
     fullWidth: false,
     maxWidth: "sm",
+    groupList: []
   };
 
   handleClickBtnGroup = () => {
@@ -46,7 +48,15 @@ export default class Calendar extends React.Component<{}, CalendarState> {
       click: this.handleClickBtnGroup,
     },
   };
-
+  componentDidMount() {
+    fetch("http://localhost:2001/refresh-groups")
+      .then((response) => response.json())
+        .then((data) => {
+          this.setState({groupList: data.result})
+          console.log('Resultat', data.result)
+        });
+  };
+ 
   render() {
     return (
       <div className="app">
@@ -104,7 +114,7 @@ export default class Calendar extends React.Component<{}, CalendarState> {
             eventRemove={function(){}}
             */
           />
-          <Modal isOpen={this.state.open} handleClose={this.handleClose}/>
+          <Modal isOpen={this.state.open} handleClose={this.handleClose} list={this.state.groupList}/>
         </div>
       </div>
     );
