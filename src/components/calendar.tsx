@@ -1,4 +1,4 @@
-import React from "react";
+import React, { RefObject } from "react";
 import FullCalendar, {
   EventApi,
   DateSelectArg,
@@ -16,20 +16,21 @@ import { Modal } from "./Modal";
 
 interface CalendarState {
   weekendsVisible: boolean;
-  currentEvents: EventApi[];
   dialogGroupsOpen: boolean;
   groupList: string[];
   currentGroup: string;
+  currentEvents: EventApi[];
 }
 
 export default class Calendar extends React.Component<{}, CalendarState> {
   state: CalendarState = {
     weekendsVisible: false,
-    currentEvents: [],
     dialogGroupsOpen: false,
     groupList: [],
     currentGroup: "",
+    currentEvents: [],
   };
+  calendarRef: RefObject<FullCalendar> = React.createRef();
 
   handleDialogGroupsOpen = () => {
     console.log("Bouton groupe cliqué");
@@ -38,7 +39,30 @@ export default class Calendar extends React.Component<{}, CalendarState> {
 
   handleDialogGroupsClose = (group: string) => {
     this.setState({ dialogGroupsOpen: false });
-    console.log("Groupe choisi : ", group);
+
+    if(group !== ""){
+      console.log("Groupe choisi : ", group);
+      this.setState({currentGroup: group});
+
+      fetch(`http://localhost:2001/refresh-events/${group}`)
+      .then((response) => response.json())
+        .then((data) => {
+          //: data.result})
+          let events = {
+            events: data.result,
+            color: "red"
+          };
+
+          if(this.calendarRef !== null && this.calendarRef.current !== null){
+            let calendarApi = this.calendarRef.current.getApi();
+            calendarApi.removeAllEvents();
+            //calendarApi.addEvent(events);
+            calendarApi.addEventSource( events )
+            console.log('Resultat', data.result)
+          }
+          
+        });
+    }
   };
 
   fullCalendarButtons = {
@@ -62,6 +86,7 @@ export default class Calendar extends React.Component<{}, CalendarState> {
         {this.renderSidebar()}
         <div className="app-main">
           <FullCalendar
+            ref={this.calendarRef}
             plugins={[
               dayGridPlugin,
               timeGridPlugin,
@@ -167,9 +192,9 @@ export default class Calendar extends React.Component<{}, CalendarState> {
   };
 
   handleEventClick = (clickInfo: EventClickArg) => {
-    // if (alert(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-    //   clickInfo.event.remove()
-    // }
+    /**if (alert(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
+       clickInfo.event.remove()
+    }**/
   };
 
   handleEvents = (events: EventApi[]) => {
@@ -183,9 +208,20 @@ function renderEventContent(eventContent: EventContentArg) {
   return (
     <>
       <b>{eventContent.timeText}</b>
-      <i>{eventContent.event.title}</i>
+      <span>{eventContent.event.extendedProps.type} - {eventContent.event.title}</span> - 
+      <i>{renderAttendees(eventContent.event.extendedProps.attendees)}</i>
     </>
   );
+}
+
+function renderAttendees(attendees: {firstname: string | undefined, lastname: string | undefined}[] | undefined) {
+  if (attendees === undefined) {
+    return "";
+  } else {
+    return attendees.map(attendee => `${attendee.firstname} ${attendee.lastname}`).join();
+    //console.log(attendee);
+    //return `${attendee.firstname} ${attendee.lastname}`;
+  }
 }
 
 function renderSidebarEvent(event: EventApi) {
