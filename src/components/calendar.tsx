@@ -44,21 +44,20 @@ export default class Calendar extends React.Component<{}, CalendarState> {
       console.log("Groupe choisi : ", group);
       this.setState({currentGroup: group});
 
-      fetch(`http://localhost:2001/refresh-events/${group}`)
+      fetch(`${process.env.REACT_APP_API_URL}/refresh-events/${group}`)
       .then((response) => response.json())
         .then((data) => {
           //: data.result})
           let events = {
-            events: data.result,
-            color: "red"
+            events: data.result
           };
 
           if(this.calendarRef !== null && this.calendarRef.current !== null){
             let calendarApi = this.calendarRef.current.getApi();
             calendarApi.removeAllEvents();
             //calendarApi.addEvent(events);
-            calendarApi.addEventSource( events )
-            console.log('Resultat', data.result)
+            calendarApi.addEventSource( events );
+            console.log('Resultat', data.result);
           }
           
         });
@@ -72,7 +71,7 @@ export default class Calendar extends React.Component<{}, CalendarState> {
     },
   };
   componentDidMount() {
-    fetch("http://localhost:2001/refresh-groups")
+    fetch(`${process.env.REACT_APP_API_URL}/refresh-groups`)
       .then((response) => response.json())
         .then((data) => {
           this.setState({groupList: data.result})
@@ -207,20 +206,29 @@ export default class Calendar extends React.Component<{}, CalendarState> {
 function renderEventContent(eventContent: EventContentArg) {
   return (
     <>
-      <b>{eventContent.timeText}</b>
-      <span>{eventContent.event.extendedProps.type} - {eventContent.event.title}</span> - 
-      <i>{renderAttendees(eventContent.event.extendedProps.attendees)}</i>
+      <b>{eventContent.timeText}</b><br />
+      <span>{eventContent.event.extendedProps.type} - {eventContent.event.title}</span><br />
+      {renderAttendees(eventContent.event.extendedProps.attendees)}
+      {renderLocations(eventContent.event.extendedProps.locations)}
     </>
   );
 }
 
 function renderAttendees(attendees: {firstname: string | undefined, lastname: string | undefined}[] | undefined) {
-  if (attendees === undefined) {
+  if (attendees === undefined || attendees.length === 0) {
     return "";
   } else {
-    return attendees.map(attendee => `${attendee.firstname} ${attendee.lastname}`).join();
-    //console.log(attendee);
-    //return `${attendee.firstname} ${attendee.lastname}`;
+    return <>
+      <span>{attendees.map(attendee => `${attendee.firstname} ${attendee.lastname}`).join(", ")}</span><br />
+    </>;
+  }
+}
+
+function renderLocations(locations: string[] | undefined) {
+  if (locations === undefined || locations.length === 0) {
+    return;
+  } else {
+    return <><span>{locations.join(", ")}</span><br /></>;
   }
 }
 
