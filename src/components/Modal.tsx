@@ -9,14 +9,10 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 interface ModalState {
   isOpen: boolean;
-  handleClose: () => void;
+  handleClose: (group: string) => void;
   list: string[];
 }
 
@@ -27,11 +23,11 @@ export const Modal: React.FC<ModalState> = ({
 }) => {
   // const [open, setOpen] = React.useState(isOpen);
   //const [maxWidth, setMaxWidth] = React.useState<DialogProps["maxWidth"]>("sm");
-  const [selectedGroup, setSelectedGroup] = React.useState<string[]>([]);
-  // useEffect(() => {
-  //   console.log("La popup est : ", isOpen);
-  //   setOpen(isOpen);
-  // }, [isOpen]);
+  const [selectedGroup, setSelectedGroup] = React.useState<string>("");
+  
+  //useEffect(() => {
+  //  console.log("La valeur a été changé : ", selectedGroup);
+  //}, [selectedGroup]);
 
   // useEffect(() => {
   //   console.log("La popup est : ", open);
@@ -43,6 +39,10 @@ export const Modal: React.FC<ModalState> = ({
       event.target.value
     );
   };**/
+  const handleselectedGroupChange = (event: React.SyntheticEvent<Element, Event>, value: string, reason: string) => {
+    setSelectedGroup(value);
+  };
+
   return (
     <React.Fragment>
       {/* <Button variant="outlined" onClick={handleClickOpen}>
@@ -73,9 +73,13 @@ export const Modal: React.FC<ModalState> = ({
           >
             <FormControl sx={{ mt: 2, minWidth: 120 }}>
               <Autocomplete
+                //value={selectedGroup}
+                //inputValue={selectedGroup}
+                onInputChange={handleselectedGroupChange}
                 id="combo-box-demo"
                 options={list}
                 sx={{ width: 300 }}
+                getOptionLabel={(option) => option}
                 noOptionsText="Aucun groupe correspondant"
                 renderInput={(params) => <TextField {...params}  label="Groupe" />}
               />
@@ -83,7 +87,7 @@ export const Modal: React.FC<ModalState> = ({
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Fermer</Button>
+          <Button onClick={() => {handleClose(selectedGroup)}}>Fermer</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

@@ -17,35 +17,34 @@ import { Modal } from "./Modal";
 interface CalendarState {
   weekendsVisible: boolean;
   currentEvents: EventApi[];
-  open: boolean;
-  fullWidth: boolean;
-  maxWidth: string;
+  dialogGroupsOpen: boolean;
   groupList: string[];
+  currentGroup: string;
 }
 
 export default class Calendar extends React.Component<{}, CalendarState> {
   state: CalendarState = {
     weekendsVisible: false,
     currentEvents: [],
-    open: false,
-    fullWidth: false,
-    maxWidth: "sm",
-    groupList: []
+    dialogGroupsOpen: false,
+    groupList: [],
+    currentGroup: "",
   };
 
-  handleClickBtnGroup = () => {
+  handleDialogGroupsOpen = () => {
     console.log("Bouton groupe cliqué");
-    this.setState({ open: true });
+    this.setState({ dialogGroupsOpen: true });
   };
 
-  handleClose = () => {
-    this.setState({ open: false });
+  handleDialogGroupsClose = (group: string) => {
+    this.setState({ dialogGroupsOpen: false });
+    console.log("Groupe choisi : ", group);
   };
 
   fullCalendarButtons = {
     selectGroup: {
       text: "Groupe",
-      click: this.handleClickBtnGroup,
+      click: this.handleDialogGroupsOpen,
     },
   };
   componentDidMount() {
@@ -114,7 +113,7 @@ export default class Calendar extends React.Component<{}, CalendarState> {
             eventRemove={function(){}}
             */
           />
-          <Modal isOpen={this.state.open} handleClose={this.handleClose} list={this.state.groupList}/>
+          <Modal isOpen={this.state.dialogGroupsOpen} handleClose={this.handleDialogGroupsClose} list={this.state.groupList}/>
         </div>
       </div>
     );
