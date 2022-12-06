@@ -27,6 +27,10 @@
 .App-link {
   color: #61dafb;
 }
+.Modal{
+  display: none;
+  overflow:hidden;
+}
 
 @keyframes App-logo-spin {
   from {

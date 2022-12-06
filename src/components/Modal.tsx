@@ -73,7 +73,6 @@ export const Modal: React.FC<ModalState> = ({
           >
             <FormControl sx={{ mt: 2, minWidth: 120 }}>
               <Autocomplete
-                disablePortal
                 id="combo-box-demo"
                 options={list}
                 sx={{ width: 300 }}
