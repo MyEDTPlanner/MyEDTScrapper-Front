@@ -5,6 +5,7 @@ import FullCalendar, {
   EventClickArg,
   EventContentArg,
   formatDate,
+  listenBySelector,
 } from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -40,26 +41,25 @@ export default class Calendar extends React.Component<{}, CalendarState> {
   handleDialogGroupsClose = (group: string) => {
     this.setState({ dialogGroupsOpen: false });
 
-    if(group !== ""){
+    if (group !== "") {
       console.log("Groupe choisi : ", group);
-      this.setState({currentGroup: group});
+      this.setState({ currentGroup: group });
 
       fetch(`${process.env.REACT_APP_API_URL}/refresh-events/${group}`)
-      .then((response) => response.json())
+        .then((response) => response.json())
         .then((data) => {
           //: data.result})
           let events = {
-            events: data.result
+            events: data.result,
           };
 
-          if(this.calendarRef !== null && this.calendarRef.current !== null){
+          if (this.calendarRef !== null && this.calendarRef.current !== null) {
             let calendarApi = this.calendarRef.current.getApi();
             calendarApi.removeAllEvents();
             //calendarApi.addEvent(events);
-            calendarApi.addEventSource( events );
-            console.log('Resultat', data.result);
+            calendarApi.addEventSource(events);
+            console.log("Resultat", data.result);
           }
-          
         });
     }
   };
@@ -73,12 +73,12 @@ export default class Calendar extends React.Component<{}, CalendarState> {
   componentDidMount() {
     fetch(`${process.env.REACT_APP_API_URL}/refresh-groups`)
       .then((response) => response.json())
-        .then((data) => {
-          this.setState({groupList: data.result})
-          console.log('Resultat', data.result)
-        });
-  };
- 
+      .then((data) => {
+        this.setState({ groupList: data.result });
+        console.log("Resultat", data.result);
+      });
+  }
+
   render() {
     return (
       <div className="app">
@@ -137,7 +137,11 @@ export default class Calendar extends React.Component<{}, CalendarState> {
             eventRemove={function(){}}
             */
           />
-          <Modal isOpen={this.state.dialogGroupsOpen} handleClose={this.handleDialogGroupsClose} list={this.state.groupList}/>
+          <Modal
+            isOpen={this.state.dialogGroupsOpen}
+            handleClose={this.handleDialogGroupsClose}
+            list={this.state.groupList}
+          />
         </div>
       </div>
     );
@@ -159,14 +163,25 @@ export default class Calendar extends React.Component<{}, CalendarState> {
             Afficher les week-ends
           </label>
         </div>
-        <div className="app-sidebar-section">
-          <h2>Prochains examens ({this.state.currentEvents.length})</h2>
-          <ul>{this.state.currentEvents.map(renderSidebarEvent)}</ul>
-        </div>
+        {this.renderProchaineExamens(this.state.currentEvents)}
       </div>
     );
   }
-
+  renderProchaineExamens(events: EventApi[]) {
+    let listExamens: EventApi[];
+    listExamens = events.filter(
+      (event) =>
+        event.extendedProps.type === "Examen" &&
+        event.start &&
+        event.start > new Date()
+    );
+    return (
+      <div className="app-sidebar-section">
+        <h2>Prochains examens ({listExamens.length})</h2>
+        <ul>{listExamens.map(renderSidebarEvent)}</ul>
+      </div>
+    );
+  }
   handleWeekendsToggle = () => {
     this.setState({
       weekendsVisible: !this.state.weekendsVisible,
@@ -206,21 +221,36 @@ export default class Calendar extends React.Component<{}, CalendarState> {
 function renderEventContent(eventContent: EventContentArg) {
   return (
     <>
-      <b>{eventContent.timeText}</b><br />
-      <span>{eventContent.event.extendedProps.type} - {eventContent.event.title}</span><br />
+      <b>{eventContent.timeText}</b>
+      <br />
+      <span>
+        {eventContent.event.extendedProps.type} - {eventContent.event.title}
+      </span>
+      <br />
       {renderAttendees(eventContent.event.extendedProps.attendees)}
       {renderLocations(eventContent.event.extendedProps.locations)}
     </>
   );
 }
 
-function renderAttendees(attendees: {firstname: string | undefined, lastname: string | undefined}[] | undefined) {
+function renderAttendees(
+  attendees:
+    | { firstname: string | undefined; lastname: string | undefined }[]
+    | undefined
+) {
   if (attendees === undefined || attendees.length === 0) {
     return "";
   } else {
-    return <>
-      <span>{attendees.map(attendee => `${attendee.firstname} ${attendee.lastname}`).join(", ")}</span><br />
-    </>;
+    return (
+      <>
+        <span>
+          {attendees
+            .map((attendee) => `${attendee.firstname} ${attendee.lastname}`)
+            .join(", ")}
+        </span>
+        <br />
+      </>
+    );
   }
 }
 
@@ -228,7 +258,12 @@ function renderLocations(locations: string[] | undefined) {
   if (locations === undefined || locations.length === 0) {
     return;
   } else {
-    return <><span>{locations.join(", ")}</span><br /></>;
+    return (
+      <>
+        <span>{locations.join(", ")}</span>
+        <br />
+      </>
+    );
   }
 }
 
