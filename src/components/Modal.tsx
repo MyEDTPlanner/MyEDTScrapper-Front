@@ -1,77 +1,66 @@
 import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Dialog, { DialogProps } from "@mui/material/Dialog";
+import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import Switch from "@mui/material/Switch";
 
 interface ModalState {
   isOpen: boolean;
-  handleClose: () => void;
+  handleClose: (group: string) => void;
+  list: string[];
 }
 
 export const Modal: React.FC<ModalState> = ({
   isOpen = false,
   handleClose,
+  list
 }) => {
   // const [open, setOpen] = React.useState(isOpen);
-  const [fullWidth, setFullWidth] = React.useState(true);
-  const [maxWidth, setMaxWidth] = React.useState<DialogProps["maxWidth"]>("sm");
-  const [groupList, setGroupList] = React.useState<String>([]);
-
-  // useEffect(() => {
-  //   console.log("La popup est : ", isOpen);
-  //   setOpen(isOpen);
-  // }, [isOpen]);
+  //const [maxWidth, setMaxWidth] = React.useState<DialogProps["maxWidth"]>("sm");
+  const [selectedGroup, setSelectedGroup] = React.useState<string>("");
+  
+  //useEffect(() => {
+  //  console.log("La valeur a été changé : ", selectedGroup);
+  //}, [selectedGroup]);
 
   // useEffect(() => {
   //   console.log("La popup est : ", open);
   // }, [open]);
 
-  const handleMaxWidthChange = (event: SelectChangeEvent<typeof maxWidth>) => {
+  /**const handleMaxWidthChange = (event: SelectChangeEvent<typeof maxWidth>) => {
     setMaxWidth(
       // @ts-expect-error autofill of arbitrary value is not handled.
       event.target.value
     );
+  };**/
+  const handleselectedGroupChange = (event: React.SyntheticEvent<Element, Event>, value: string, reason: string) => {
+    setSelectedGroup(value);
   };
 
-  const handleFullWidthChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setFullWidth(event.target.checked);
-  };
-
-  const recupGroupFromApi = () => {
-    fetch("http://192.168.194.115:2001/refresh-groups")
-      .then((response) => response.json())
-      //.then((data) => console.log(data))
-      .then((data) => setGroupList(data.result));
-  };
-  recupGroupFromApi();
   return (
     <React.Fragment>
       {/* <Button variant="outlined" onClick={handleClickOpen}>
         Open max-width dialog
       </Button>*/}
       <Dialog
-        fullWidth={fullWidth}
-        maxWidth={maxWidth}
+        fullWidth={true}
+        maxWidth="sm"
         open={isOpen}
         onClose={handleClose}
       >
-        <DialogTitle>choisissez votre groupe ici!</DialogTitle>
+        <DialogTitle>Groupe</DialogTitle>
+        
         <DialogContent>
           <DialogContentText>
-            Selectionez un groupe parmis la liste.
+            Selectionez votre groupe parmis la liste.
           </DialogContentText>
+        
           <Box
             noValidate
             component="form"
@@ -83,36 +72,22 @@ export const Modal: React.FC<ModalState> = ({
             }}
           >
             <FormControl sx={{ mt: 2, minWidth: 120 }}>
-              <InputLabel htmlFor="max-width">maxWidth</InputLabel>
-              <Select
-                autoFocus
-                value={maxWidth}
-                onChange={handleMaxWidthChange}
-                label="maxWidth"
-                inputProps={{
-                  name: "max-width",
-                  id: "max-width",
-                }}
-              >
-                <MenuItem value={false as any}>false</MenuItem>
-                <MenuItem value="xs">xs</MenuItem>
-                <MenuItem value="sm">sm</MenuItem>
-                <MenuItem value="md">md</MenuItem>
-                <MenuItem value="lg">lg</MenuItem>
-                <MenuItem value="xl">xl</MenuItem>
-              </Select>
+              <Autocomplete
+                //value={selectedGroup}
+                //inputValue={selectedGroup}
+                onInputChange={handleselectedGroupChange}
+                id="combo-box-demo"
+                options={list}
+                sx={{ width: 300 }}
+                getOptionLabel={(option) => option}
+                noOptionsText="Aucun groupe correspondant"
+                renderInput={(params) => <TextField {...params}  label="Groupe" />}
+              />
             </FormControl>
-            <FormControlLabel
-              sx={{ mt: 1 }}
-              control={
-                <Switch checked={fullWidth} onChange={handleFullWidthChange} />
-              }
-              label="Full width"
-            />
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Close</Button>
+          <Button onClick={() => {handleClose(selectedGroup)}}>Fermer</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { RefObject } from "react";
 import FullCalendar, {
   EventApi,
   DateSelectArg,
@@ -16,43 +16,76 @@ import { Modal } from "./Modal";
 
 interface CalendarState {
   weekendsVisible: boolean;
+  dialogGroupsOpen: boolean;
+  groupList: string[];
+  currentGroup: string;
   currentEvents: EventApi[];
-  open: boolean;
-  fullWidth: boolean;
-  maxWidth: string;
 }
 
 export default class Calendar extends React.Component<{}, CalendarState> {
   state: CalendarState = {
     weekendsVisible: false,
+    dialogGroupsOpen: false,
+    groupList: [],
+    currentGroup: "",
     currentEvents: [],
-    open: false,
-    fullWidth: false,
-    maxWidth: "sm",
   };
+  calendarRef: RefObject<FullCalendar> = React.createRef();
 
-  handleClickBtnGroup = () => {
+  handleDialogGroupsOpen = () => {
     console.log("Bouton groupe cliqué");
-    this.setState({ open: true });
+    this.setState({ dialogGroupsOpen: true });
   };
 
-  handleClose = () => {
-    this.setState({ open: false });
+  handleDialogGroupsClose = (group: string) => {
+    this.setState({ dialogGroupsOpen: false });
+
+    if(group !== ""){
+      console.log("Groupe choisi : ", group);
+      this.setState({currentGroup: group});
+
+      fetch(`${process.env.REACT_APP_API_URL}/refresh-events/${group}`)
+      .then((response) => response.json())
+        .then((data) => {
+          //: data.result})
+          let events = {
+            events: data.result
+          };
+
+          if(this.calendarRef !== null && this.calendarRef.current !== null){
+            let calendarApi = this.calendarRef.current.getApi();
+            calendarApi.removeAllEvents();
+            //calendarApi.addEvent(events);
+            calendarApi.addEventSource( events );
+            console.log('Resultat', data.result);
+          }
+          
+        });
+    }
   };
 
   fullCalendarButtons = {
     selectGroup: {
       text: "Groupe",
-      click: this.handleClickBtnGroup,
+      click: this.handleDialogGroupsOpen,
     },
   };
-
+  componentDidMount() {
+    fetch(`${process.env.REACT_APP_API_URL}/refresh-groups`)
+      .then((response) => response.json())
+        .then((data) => {
+          this.setState({groupList: data.result})
+          console.log('Resultat', data.result)
+        });
+  };
+ 
   render() {
     return (
       <div className="app">
         {this.renderSidebar()}
         <div className="app-main">
           <FullCalendar
+            ref={this.calendarRef}
             plugins={[
               dayGridPlugin,
               timeGridPlugin,
@@ -104,7 +137,7 @@ export default class Calendar extends React.Component<{}, CalendarState> {
             eventRemove={function(){}}
             */
           />
-          <Modal isOpen={this.state.open} handleClose={this.handleClose}/>
+          <Modal isOpen={this.state.dialogGroupsOpen} handleClose={this.handleDialogGroupsClose} list={this.state.groupList}/>
         </div>
       </div>
     );
@@ -158,9 +191,9 @@ export default class Calendar extends React.Component<{}, CalendarState> {
   };
 
   handleEventClick = (clickInfo: EventClickArg) => {
-    // if (alert(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-    //   clickInfo.event.remove()
-    // }
+    /**if (alert(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
+       clickInfo.event.remove()
+    }**/
   };
 
   handleEvents = (events: EventApi[]) => {
@@ -173,10 +206,30 @@ export default class Calendar extends React.Component<{}, CalendarState> {
 function renderEventContent(eventContent: EventContentArg) {
   return (
     <>
-      <b>{eventContent.timeText}</b>
-      <i>{eventContent.event.title}</i>
+      <b>{eventContent.timeText}</b><br />
+      <span>{eventContent.event.extendedProps.type} - {eventContent.event.title}</span><br />
+      {renderAttendees(eventContent.event.extendedProps.attendees)}
+      {renderLocations(eventContent.event.extendedProps.locations)}
     </>
   );
+}
+
+function renderAttendees(attendees: {firstname: string | undefined, lastname: string | undefined}[] | undefined) {
+  if (attendees === undefined || attendees.length === 0) {
+    return "";
+  } else {
+    return <>
+      <span>{attendees.map(attendee => `${attendee.firstname} ${attendee.lastname}`).join(", ")}</span><br />
+    </>;
+  }
+}
+
+function renderLocations(locations: string[] | undefined) {
+  if (locations === undefined || locations.length === 0) {
+    return;
+  } else {
+    return <><span>{locations.join(", ")}</span><br /></>;
+  }
 }
 
 function renderSidebarEvent(event: EventApi) {

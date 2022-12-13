@@ -2,6 +2,18 @@
 
 MyEDTPlanner est une suite de module permettant la récupération et l'affichage du planning des cours d'une classe de l'université d'Évry par la biais de scrapping du site [https://edt.univ-evry.fr](edt.univ-evry.fr).
 
+## Configuration
+
+Pour faire fonctionner ce projet, vous aller devoir remplir les variables d'environnements dans un fichier .env (utilisez le fichier example.env comme base et renomer le en .env)
+
+Variables d'environnements :
+
+| Nom               | Description                      |
+|-------------------|----------------------------------|
+| REACT_APP_API_URL | http://localhost:2001            |
+
+Pour la réalisation de tests, il est également possible d'utiliser l'API fictive disponnible à l'adresse `http://api.myedtplanner.lichou.co` (le contenu retourné est toujours le même, évite de faire trop de récupération de données).
+
 ## Installation
 
 Clone du projet
@@ -24,7 +36,6 @@ Compiler les fichiers
 npm start
 ```
 
-Il ne reste plus qu'à ouvrir le fichier index.html avec un navigateur web pour accéder à l'interface.
 ## Contribution
 
 Merci de lire les fichiers :
