@@ -7,7 +7,7 @@ import FullCalendar, {
   formatDate,
   listenBySelector,
 } from "@fullcalendar/react";
-import { getEventColor } from '../utils/event-color';
+import { getEventColor } from "../utils/event-color";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -49,18 +49,18 @@ export default class Calendar extends React.Component<{}, CalendarState> {
       fetch(`${process.env.REACT_APP_API_URL}/refresh-events/${group}`)
         .then((response) => response.json())
         .then((data) => {
-          let eventList = data.result.map(e => {
-            return {...e, ...getEventColor(e.type)}
+          let eventList = data.result.map((e: any) => {
+            return { ...e, ...getEventColor(e.type) };
           });
           let events = {
-            events: eventList
+            events: eventList,
           };
 
           if (this.calendarRef !== null && this.calendarRef.current !== null) {
             let calendarApi = this.calendarRef.current.getApi();
             calendarApi.removeAllEvents();
-            calendarApi.addEventSource( events );
-            console.log('Resultat', data.result);
+            calendarApi.addEventSource(events);
+            console.log("Resultat", data.result);
           }
         });
     }

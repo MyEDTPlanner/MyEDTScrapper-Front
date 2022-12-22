@@ -1,40 +1,39 @@
 interface colorsType {
-    [key: string]: {
-        backgroundColor: string,
-        borderColor: string,
-        textColor: string
-    };
-};
+  [key: string]: {
+    backgroundColor: string;
+    borderColor: string;
+    textColor: string;
+  };
+}
 
 const eventColor: colorsType = {
-    'Cours':{
-        backgroundColor:'#3F51B5',
-        borderColor: '#3F51B5',
-        textColor: '#000000'
-    },
-    'Examen':{
-        backgroundColor: '#F44336',
-        borderColor: '#F44336',
-        textColor: '#FFFFFF'
-    },
-    'TP':{
-        backgroundColor: '#FF9800',
-        borderColor: '#FF9800',
-        textColor: '#000000'
-    },
-    'TD':{
-        backgroundColor: '#FFEB3B',
-        borderColor: '#FFEB3B',
-        textColor: '#FFFFFF'
-    },
-    'other':{
-        backgroundColor: '#009688',
-        borderColor: '##009688',
-        textColor: '#FFFFFF'
-    }
-}
-export function getEventColor(eventType: string){
-    if(eventColor[eventType])
-        return eventColor[eventType];
-    return eventColor.other;
+  Cours: {
+    backgroundColor: "#48cae4",
+    borderColor: "#48cae4",
+    textColor: "#000000",
+  },
+  Examen: {
+    backgroundColor: "#ff7f51",
+    borderColor: "#ff7f51",
+    textColor: "#000000",
+  },
+  TP: {
+    backgroundColor: "#ffb703",
+    borderColor: "#ffb703",
+    textColor: "#000000",
+  },
+  TD: {
+    backgroundColor: "#fbff12",
+    borderColor: "#fbff12",
+    textColor: "#000000",
+  },
+  other: {
+    backgroundColor: "#fad2e1",
+    borderColor: "#fad2e1",
+    textColor: "#000000",
+  },
+};
+export function getEventColor(eventType: string) {
+  if (eventColor[eventType]) return eventColor[eventType];
+  return eventColor.other;
 }
