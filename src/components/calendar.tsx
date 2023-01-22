@@ -6,6 +6,8 @@ import FullCalendar, {
   EventContentArg,
   formatDate,
   listenBySelector,
+  EventHoveringArg,
+  EventMountArg,
 } from "@fullcalendar/react";
 import { getEventColor } from "../utils/event-color";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -15,6 +17,8 @@ import listPlugin from "@fullcalendar/list";
 import frLocale from "@fullcalendar/core/locales/fr";
 import { INITIAL_EVENTS, createEventId } from "../utils/event-utils";
 import { Modal } from "./Modal";
+import tippy from 'tippy.js';
+import 'tippy.js/dist/tippy.css';
 
 interface CalendarState {
   weekendsVisible: boolean;
@@ -104,16 +108,18 @@ export default class Calendar extends React.Component<{}, CalendarState> {
             navLinks={true}
             locales={[frLocale]}
             locale="fr"
-            editable={true}
-            selectable={true}
+            //editable={true}
+            //selectable={true}
             selectMirror={true}
             dayMaxEvents={true}
             weekends={this.state.weekendsVisible}
             initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
-            select={this.handleDateSelect}
-            eventContent={renderEventContent} // custom render function
-            eventClick={this.handleEventClick}
-            eventsSet={this.handleEvents} // called after events are initialized/added/changed/removed
+            //select={this.handleDateSelect}
+            //eventContent={renderEventContent} // custom render function
+            //eventClick={this.handleEventClick}
+            eventMouseEnter={this.handleEventMouseEnter}
+            //eventDidMount={this.handleEventDidMount}
+            //eventsSet={this.handleEvents} // called after events are initialized/added/changed/removed
             views={{
               customTimeGridWeek: {
                 type: "timeGridWeek",
@@ -184,6 +190,22 @@ export default class Calendar extends React.Component<{}, CalendarState> {
       </div>
     );
   }
+  handleEventMouseEnter = (mouseEnterInfo: EventHoveringArg) => {
+    //mouseEnterInfo.el.style.borderColor = "red";
+    console.log(mouseEnterInfo);
+    //Add a tooltip to the event with the description.
+    //mouseEnterInfo.el.setAttribute("title", mouseEnterInfo.event.extendedProps.description);
+    let instance = tippy(mouseEnterInfo.el, {
+      content: mouseEnterInfo.event.title,
+      //trigger: 'click',
+    });
+    console.log("tada");
+    //instance.disable();
+    //instance.show();
+  }
+  handleEventDidMount = (info: EventMountArg) => {
+  }
+
   handleWeekendsToggle = () => {
     this.setState({
       weekendsVisible: !this.state.weekendsVisible,
@@ -211,6 +233,9 @@ export default class Calendar extends React.Component<{}, CalendarState> {
     /**if (alert(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
        clickInfo.event.remove()
     }**/
+    tippy(clickInfo.el, {
+      content: "Ceci est un test",
+    });
   };
 
   handleEvents = (events: EventApi[]) => {

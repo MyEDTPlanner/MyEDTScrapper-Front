@@ -1,6 +1,7 @@
+/**
 html,
 body,
-body > div { /* the react root */
+body > div {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -20,16 +21,17 @@ li {
   margin: 1.5em 0;
   padding: 0;
 }
-
-b { /* used for event dates/times */
+b {
   margin-right: 3px;
 }
+**/
 
 .app {
   display: flex;
   min-height: 100%;
-  font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+  font-family: Helvetica, Arial, Helvetica Neue, sans-serif;
   font-size: 14px;
+  background-color: rgb(245, 245, 245);
 }
 
 .app-sidebar {
