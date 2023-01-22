@@ -22,14 +22,53 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import OutdoorGrillIcon from '@mui/icons-material/OutdoorGrill';
 import GroupIcon from '@mui/icons-material/Group';
 import Calendar from "./components/calendar";
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+import InputAdornment from '@mui/material/InputAdornment';
+import SearchIcon from '@mui/icons-material/Search';
+import { styled, alpha } from "@mui/material/styles";
 
 import "./index.css";
 const drawerWidth = 360;
 
+const groups = [
+  {label: "Groupe 1", value: "groupe1"},
+  {label: "Groupe 2", value: "groupe2"},
+  {label: "Groupe 3", value: "groupe3"},
+]; 
+
+//https://stackoverflow.com/questions/74239730/mui-autocomplete-does-not-fully-appear-in-appbar
+//https://codesandbox.io/s/blue-wave-o3qrfz?file=/demo.tsx:2614-2635
+
+//https://mui.com/material-ui/react-bottom-navigation/
+
+const StyledTextField = styled(TextField)(({ theme }) => ({
+  color: "#fff",
+  background: "rgba(255, 255, 255, 0.15)",
+  borderRadius: "4px",
+  width: "100%",
+  "& input": {
+    color: "#fff !important"
+  },
+  "& fieldset": {
+    borderWidth: "0px",
+    "& fieldset:hover, & fieldset:focus, & fieldset:active": {
+      borderWidth: "0px"
+    },
+    "& .MuiInputBase-input": {
+      padding: theme.spacing(2, 1, 1, 2),
+      transition: theme.transitions.create("width"),
+      color: "#fff",
+      width: "100%",
+      [theme.breakpoints.up("sm")]: {
+        width: "12ch",
+        "&:focus": {
+          width: "20ch"
+        }
+      }
+    }
+  }
+}));
 
 const App: FC = () => {
   return(
@@ -37,9 +76,31 @@ const App: FC = () => {
       <CssBaseline />
       <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
         <Toolbar>
-          <Typography variant="h6" noWrap component="div">
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             Agenda
           </Typography>
+          <Autocomplete
+            disablePortal
+            options={groups}
+            sx={{ width: 300 }}
+            renderInput={(params) => 
+              <StyledTextField 
+                {...params}
+                placeholder="Groupe..."
+                size="small"
+                InputProps={{
+                  ...params.InputProps,
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon
+                        style={{ color: "white", marginLeft: "8px" }}
+                      />
+                    </InputAdornment>
+                  )
+                }}
+              />
+            }
+          />
         </Toolbar>
       </AppBar>
       <Drawer
@@ -85,18 +146,12 @@ const App: FC = () => {
                 <GroupIcon />
               </ListItemIcon>
               <ListItemText id="switch-list-label-bluetooth" primary="Groupe" secondary="Votre classe" />
-              <FormControl sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel id="demo-simple-select-label">Code</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  label="Groupe"
-                >
-                  <MenuItem value={10}>M2MIAA</MenuItem>
-                  <MenuItem value={20}>M1MIAA</MenuItem>
-                  <MenuItem value={30}>L3MIAA</MenuItem>
-                </Select>
-              </FormControl>
+              <Autocomplete
+                disablePortal
+                options={groups}
+                sx={{ minWidth: 120 }}
+                renderInput={(params) => <TextField {...params} label="Code" />}
+              />
             </ListItem>
           </List>
           <Divider />
