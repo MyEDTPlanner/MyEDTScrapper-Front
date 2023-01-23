@@ -27,6 +27,12 @@ import Autocomplete from '@mui/material/Autocomplete';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from "@mui/material/styles";
+import Paper from '@mui/material/Paper';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import BottomNavigation from '@mui/material/BottomNavigation';
+import RestoreIcon from '@mui/icons-material/Restore';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 import "./index.css";
 const drawerWidth = 360;
@@ -41,6 +47,8 @@ const groups = [
 //https://codesandbox.io/s/blue-wave-o3qrfz?file=/demo.tsx:2614-2635
 
 //https://mui.com/material-ui/react-bottom-navigation/
+//https://mui.com/material-ui/react-tabs/
+//https://github.com/oliviertassinari/react-swipeable-views
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
   color: "#fff",
@@ -112,7 +120,8 @@ const App: FC = () => {
         }}
       >
         <Toolbar />
-        <Box sx={{ overflow: 'auto' }}>
+        <Box sx={{ overflow: 'auto', display: 'flex', height: '100%', maxHeight: '100%', flexDirection: 'column'}}>
+          <Box sx={{flexGrow: 1, overflow: 'auto' }} >
           <List
             sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
             subheader={<ListSubheader>Paramètres</ListSubheader>}
@@ -155,18 +164,17 @@ const App: FC = () => {
             </ListItem>
           </List>
           <Divider />
-          <List>
-            {['All mail', 'Trash', 'Spam'].map((text, index) => (
-              <ListItem key={text} disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                  </ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
+          </Box>
+          <Paper elevation={0}>
+            <Divider />
+            <BottomNavigation
+              showLabels
+            >
+              <BottomNavigationAction label="Apperçu" icon={<VisibilityIcon />} />
+              <BottomNavigationAction label="Examen" icon={<RestoreIcon />} />
+              <BottomNavigationAction label="Paramètre" icon={<SettingsIcon />} />
+            </BottomNavigation>
+          </Paper>
         </Box>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
