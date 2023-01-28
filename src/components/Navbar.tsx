@@ -28,9 +28,14 @@ type Props = {
     groups: any[];
     selectedGroup: any;
     handleGroupChange: (event: React.SyntheticEvent, value: any | Array<any>, reason: string) => void;
+    settings : {
+        showUniversityPresence: boolean;
+        showWeekends: boolean;
+    };
+    handleSettingsChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }; 
 
-export const Navbar = ({groups, selectedGroup, handleGroupChange}: Props) => {
+export const Navbar = ({settings, groups, selectedGroup, handleGroupChange, handleSettingsChange}: Props) => {
     return (
         <Drawer
         variant="permanent"
@@ -51,11 +56,14 @@ export const Navbar = ({groups, selectedGroup, handleGroupChange}: Props) => {
               <ListItemIcon>
                 <OutdoorGrillIcon />
               </ListItemIcon>
-              <ListItemText id="switch-list-label-wifi" primary="Week-end" secondary="Masquer les week-end" />
+              <ListItemText id="switch-list-label-wifi" primary="Week-end" secondary={settings.showWeekends?"Afficher les week-end":"Masquer les week-end"} />
               <Switch
+                onChange={handleSettingsChange}
+                checked={settings.showWeekends}
                 edge="end"
                 inputProps={{
-                  'aria-labelledby': 'switch-list-label-wifi',
+                    'name': 'showWeekends',
+                    'aria-labelledby': 'switch-list-label-wifi',
                 }}
               />
             </ListItem>
@@ -63,11 +71,14 @@ export const Navbar = ({groups, selectedGroup, handleGroupChange}: Props) => {
               <ListItemIcon>
                 <SchoolIcon />
               </ListItemIcon>
-              <ListItemText id="switch-list-label-bluetooth" primary="Présence universitaire" secondary="Masquer les présences universitaires" />
+              <ListItemText id="switch-list-label-bluetooth" primary="Présence universitaire" secondary={settings.showUniversityPresence?"Afficher les présences universitaires":"Masquer les présences universitaires"} />
               <Switch
+                onChange={handleSettingsChange}
+                checked={settings.showUniversityPresence}
                 edge="end"
                 inputProps={{
-                  'aria-labelledby': 'switch-list-label-bluetooth',
+                    'name': 'showUniversityPresence',
+                    'aria-labelledby': 'switch-list-label-bluetooth',
                 }}
               />
             </ListItem>
