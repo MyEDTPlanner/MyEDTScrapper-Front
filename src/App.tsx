@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 
 import { Navbar } from "./components/Navbar";
 import { Topbar } from "./components/Topbar";
-//import Calendar from "./components/Calendar";
+import Calendar from "./components/Calendar";
 
 import "./index.css";
 
@@ -62,11 +62,7 @@ const App: FC = () => {
     setSelectedGroup(value);
   };
   const handleSettingsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("La bouton a été cliqué", event.target.name);
-    console.log(event.target.checked);
     setSettings({...settings, [event.target.name]: event.target.checked});
-    //setSettings({...settings, showWeekends: event.target.checked});
-    //event.target.checked = !event.target.checked;
   };
 
   return(
@@ -80,6 +76,7 @@ const App: FC = () => {
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
           tempor
         </Typography>
+        <Calendar/>
       </Box>
     </Box>
   );

@@ -3,25 +3,17 @@ import {
     Drawer,
     Toolbar,
     Box,
-    List,
-    ListSubheader,
-    Switch,
-    ListItem,
-    ListItemIcon,
-    ListItemText,
+    Typography,
     Paper,
     BottomNavigationAction,
     BottomNavigation,
-    Divider,
-    Autocomplete,
-    TextField
 } from '@mui/material';
-import OutdoorGrillIcon from '@mui/icons-material/OutdoorGrill';
-import SchoolIcon from '@mui/icons-material/School';
 import SettingsIcon from '@mui/icons-material/Settings';
-import GroupIcon from '@mui/icons-material/Group';
 import RestoreIcon from '@mui/icons-material/Restore';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import { SettingsTabPanel } from './SettingsTabPanel';
+import { PreviewTabPanel } from './PreviewTabPanel';
+import { ExamsTabPanel } from './ExamsTabPanel';
 
 const drawerWidth = 360;
 type Props = {
@@ -36,7 +28,14 @@ type Props = {
 }; 
 
 export const Navbar = ({settings, groups, selectedGroup, handleGroupChange, handleSettingsChange}: Props) => {
-    return (
+  const [value, setValue] = React.useState(0);
+
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
+
+  
+  return (
         <Drawer
         variant="permanent"
         sx={{
@@ -48,71 +47,57 @@ export const Navbar = ({settings, groups, selectedGroup, handleGroupChange, hand
         <Toolbar />
         <Box sx={{ overflow: 'auto', display: 'flex', height: '100%', maxHeight: '100%', flexDirection: 'column'}}>
           <Box sx={{flexGrow: 1, overflow: 'auto' }} >
-          <List
-            sx={{ width: '100%', maxWidth: drawerWidth, bgcolor: 'background.paper' }}
-            subheader={<ListSubheader>Paramètres</ListSubheader>}
-          >
-            <ListItem>
-              <ListItemIcon>
-                <OutdoorGrillIcon />
-              </ListItemIcon>
-              <ListItemText id="switch-list-label-wifi" primary="Week-end" secondary={settings.showWeekends?"Afficher les week-end":"Masquer les week-end"} />
-              <Switch
-                onChange={handleSettingsChange}
-                checked={settings.showWeekends}
-                edge="end"
-                inputProps={{
-                    'name': 'showWeekends',
-                    'aria-labelledby': 'switch-list-label-wifi',
-                }}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemIcon>
-                <SchoolIcon />
-              </ListItemIcon>
-              <ListItemText id="switch-list-label-bluetooth" primary="Présence universitaire" secondary={settings.showUniversityPresence?"Afficher les présences universitaires":"Masquer les présences universitaires"} />
-              <Switch
-                onChange={handleSettingsChange}
-                checked={settings.showUniversityPresence}
-                edge="end"
-                inputProps={{
-                    'name': 'showUniversityPresence',
-                    'aria-labelledby': 'switch-list-label-bluetooth',
-                }}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemIcon>
-                <GroupIcon />
-              </ListItemIcon>
-              <ListItemText id="switch-list-label-bluetooth" primary="Groupe" secondary="Votre classe" />
-              <Autocomplete
-                disablePortal
-                options={groups}
-                value={selectedGroup || null}
-                //inputValue={selectedGroup.label}
-                getOptionLabel={(option) => option.label}
-                onChange={handleGroupChange}
-                sx={{ minWidth: 120 }}
-                isOptionEqualToValue={(option, value) => option.value === value.value}
-                renderInput={(params) => <TextField {...params} label="Code" />}
-              />
-            </ListItem>
-          </List>
-          <Divider />
+            <TabPanel value={value} index={0}>
+              <PreviewTabPanel />
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+              <ExamsTabPanel />
+            </TabPanel>
+            <TabPanel value={value} index={2}>
+              <SettingsTabPanel settings={settings} handleSettingsChange={handleSettingsChange} />
+            </TabPanel>
           </Box>
-          <Paper elevation={0}>
-            <Divider />
-            <BottomNavigation
-              showLabels
-            >
-              <BottomNavigationAction label="Apperçu" icon={<VisibilityIcon />} />
-              <BottomNavigationAction label="Examen" icon={<RestoreIcon />} />
-              <BottomNavigationAction label="Paramètre" icon={<SettingsIcon />} />
+          <Paper elevation={0} sx={{ borderTop: 1, borderColor: 'divider' }}>
+            <BottomNavigation showLabels={true} value={value} onChange={handleTabChange} >
+              <BottomNavigationAction label="Apperçu" icon={<VisibilityIcon />} {...a11yProps(0)} />
+              <BottomNavigationAction label="Examen" icon={<RestoreIcon />} {...a11yProps(1)} />
+              <BottomNavigationAction label="Paramètre" icon={<SettingsIcon />} {...a11yProps(2)} />
             </BottomNavigation>
           </Paper>
         </Box>
       </Drawer>
     );
 };
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`navbar-tabpanel-${index}`}
+      aria-labelledby={`navbar-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box>
+          {children}
+        </Box>
+      )}
+    </div>
+  );
+}
+
+function a11yProps(index: number) {
+  return {
+    id: `navbar-tab-${index}`,
+    'aria-controls': `navbar-tabpanel-${index}`,
+  };
+}
