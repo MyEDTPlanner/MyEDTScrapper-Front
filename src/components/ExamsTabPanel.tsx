@@ -7,14 +7,19 @@ import {
     ListItemAvatar,
     Avatar,
     ListItemText,
-    Divider
-
+    Divider,
+    Alert,
+    AlertTitle
 } from '@mui/material';
 
 export const ExamsTabPanel = () => {
     return (
         <Box sx={{ p: 3 }}>
             <Typography>Examens</Typography>
+            <Alert severity="success">
+        <AlertTitle>Success</AlertTitle>
+        This is a success alert <strong>check it out!</strong>
+      </Alert>
             <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                 <ListItem alignItems="flex-start">
                     <ListItemAvatar>

@@ -119,7 +119,7 @@ export default class Calendar extends React.Component<{}, CalendarState> {
             //eventClick={this.handleEventClick}
             eventMouseEnter={this.handleEventMouseEnter}
             //eventDidMount={this.handleEventDidMount}
-            //eventsSet={this.handleEvents} // called after events are initialized/added/changed/removed
+            eventsSet={this.handleEvents} // called after events are initialized/added/changed/removed
             views={{
               customTimeGridWeek: {
                 type: "timeGridWeek",
@@ -179,9 +179,9 @@ export default class Calendar extends React.Component<{}, CalendarState> {
     let listExamens: EventApi[];
     listExamens = events.filter(
       (event) =>
-        event.extendedProps.type === "Examen" &&
-        event.start &&
-        event.start > new Date()
+        event.extendedProps.type === "Examen"
+        && event.start
+        && event.start > new Date()
     );
     return (
       <div className="app-sidebar-section">
@@ -233,9 +233,6 @@ export default class Calendar extends React.Component<{}, CalendarState> {
     /**if (alert(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
        clickInfo.event.remove()
     }**/
-    tippy(clickInfo.el, {
-      content: "Ceci est un test",
-    });
   };
 
   handleEvents = (events: EventApi[]) => {

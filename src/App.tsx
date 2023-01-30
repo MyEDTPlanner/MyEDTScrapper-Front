@@ -72,10 +72,6 @@ const App: FC = () => {
       <Navbar settings={settings} groups={groups} selectedGroup={selectedGroup} handleGroupChange={handleGroupChange} handleSettingsChange={handleSettingsChange} />
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
-        <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-          tempor
-        </Typography>
         <Calendar/>
       </Box>
     </Box>
