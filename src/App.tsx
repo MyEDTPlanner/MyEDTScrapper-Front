@@ -7,7 +7,10 @@ import Typography from '@mui/material/Typography';
 
 import { Navbar } from "./components/Navbar";
 import { Topbar } from "./components/Topbar";
-import Calendar from "./components/Calendar";
+import { Calendar } from "./components/Calendar";
+//import CalendarCopy from "./components/CalendarCopy";
+
+
 
 import "./index.css";
 
@@ -70,9 +73,11 @@ const App: FC = () => {
       <CssBaseline />
       <Topbar groups={groups} selectedGroup={selectedGroup} handleGroupChange={handleGroupChange} />
       <Navbar settings={settings} groups={groups} selectedGroup={selectedGroup} handleGroupChange={handleGroupChange} handleSettingsChange={handleSettingsChange} />
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" sx={{ flexGrow: 1, height: '100vh', display:'flex', flexDirection: 'column'}}>
         <Toolbar />
-        <Calendar/>
+        <Box sx={{ flexGrow: 1, p: 3 }}>
+          <Calendar settings={settings} events={events} />
+        </Box>
       </Box>
     </Box>
   );
