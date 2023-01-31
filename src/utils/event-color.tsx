@@ -33,7 +33,8 @@ const eventColor: colorsType = {
     textColor: "#000000",
   },
 };
-export function getEventColor(eventType: string) {
+
+export const getEventColor = (eventType: string) => {
   if (eventColor[eventType]) return eventColor[eventType];
   return eventColor.other;
 }

@@ -1,16 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FC } from "react";
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 
 import { Navbar } from "./components/Navbar";
 import { Topbar } from "./components/Topbar";
 import { Calendar } from "./components/Calendar";
+import { retrieveGroups, retrieveEvents, refreshEventsData } from "./utils/database";
 //import CalendarCopy from "./components/CalendarCopy";
-
-
 
 import "./index.css";
 
@@ -20,8 +18,8 @@ interface SettingsInterface {
 };
 
 interface GroupInterface {
-  label: string;
-  value: string;
+  name: string;
+  code: string;
 };
 
 interface EventInterface {
@@ -39,14 +37,14 @@ interface EventInterface {
   uuid: string,
 };
 
-const defaultSelectedGroup: GroupInterface = {label: "M2 Miage App", value: "M2MIAA"};
+const defaultSelectedGroup: GroupInterface = {name: "M2 Miage App", code: "M2MIAA"};
 const defaultGroups: GroupInterface[] = [
-  {label: "Groupe 1", value: "groupe1"},
-  {label: "Groupe 2", value: "groupe2"},
-  {label: "Groupe 3", value: "groupe3"},
-  {label: "L3 Miage App", value: "L3MIAA"},
-  {label: "M1 Miage App", value: "M1MIAA"},
-  {label: "M2 Miage App", value: "M2MIAA"}
+  {name: "Groupe 1", code: "groupe1"},
+  {name: "Groupe 2", code: "groupe2"},
+  {name: "Groupe 3", code: "groupe3"},
+  {name: "L3 Miage App", code: "L3MIAA"},
+  {name: "M1 Miage App", code: "M1MIAA"},
+  {name: "M2 Miage App", code: "M2MIAA"}
 ];
 const defaultSettings: SettingsInterface = {
   showUniversityPresence: true,
@@ -55,14 +53,31 @@ const defaultSettings: SettingsInterface = {
 
 const App: FC = () => {
   const [settings, setSettings] = useState<SettingsInterface>(defaultSettings);
-  const [selectedGroup, setSelectedGroup] = useState<GroupInterface | null>(defaultSelectedGroup);
+  const [selectedGroup, setSelectedGroup] = useState<GroupInterface | null>(null);
   const [selectedEvent, setSelectedEvent] = useState<EventInterface | null>(null);
-  const [groups, setGroups] = useState<GroupInterface[]>(defaultGroups);
+  const [groups, setGroups] = useState<GroupInterface[]>([]);
   const [events, setEvents] = useState<EventInterface[]>([]);
   
+  useEffect(() => {
+    retrieveGroups().then((groups) => {
+      setGroups(groups);
+    });
+  }, []);
 
   const handleGroupChange = (event: React.SyntheticEvent, value: any | Array<any>, reason: string) => {
     setSelectedGroup(value);
+    retrieveEvents(value.code).then((events) => {
+      if(events.length > 0) {
+        setEvents(events);
+      } else {
+        refreshEventsData(value.code).then((events) => {
+          console.log("Fin de récup des events pour le groupe " + value.code + ". Affichage des events");
+          retrieveEvents(value.code).then((events) => {
+            setEvents(events);
+          });
+        });
+      }
+    });
   };
   const handleSettingsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSettings({...settings, [event.target.name]: event.target.checked});
@@ -82,6 +97,8 @@ const App: FC = () => {
     </Box>
   );
 };
+
+
 
 export default App;
 

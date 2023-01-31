@@ -12,6 +12,7 @@ import FullCalendar, {
   listenBySelector,
   EventHoveringArg,
   EventMountArg,
+  EventInputTransformer,
 } from "@fullcalendar/react";
 import { getEventColor } from "../utils/event-color";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -47,7 +48,7 @@ type CalendarProps = {
   };
 };
 
-export const Calendar = ({settings}: CalendarProps) => {
+export const Calendar = ({events, settings}: CalendarProps) => {
   return (
       <FullCalendar
         plugins={[
@@ -69,8 +70,9 @@ export const Calendar = ({settings}: CalendarProps) => {
         selectMirror={true}
         dayMaxEvents={true}
         weekends={settings.showWeekends}
+        events={events}
+        eventDataTransform={handleEventColor}
         //initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
-        //select={this.handleDateSelect}
         //eventContent={renderEventContent} // custom render function
         //eventClick={this.handleEventClick}
         //eventMouseEnter={this.handleEventMouseEnter}
@@ -94,12 +96,20 @@ export const Calendar = ({settings}: CalendarProps) => {
           },
         }}
         /* you can update a remote database when these fire:
+        select={this.handleDateSelect}
         eventAdd={function(){}}
         eventChange={function(){}}
         eventRemove={function(){}}
         */
       />
   );
+};
+
+const handleEventColor = (event: any | null) => {
+  return {
+    ...event,
+    ...getEventColor(event?.type)
+  };
 };
 
 const renderEventContent = (eventContent: EventContentArg) => {

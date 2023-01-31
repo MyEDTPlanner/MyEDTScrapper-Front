@@ -25,12 +25,12 @@ export const Topbar = ({groups, selectedGroup, handleGroupChange}: Props) => {
           <Autocomplete
             disablePortal
             options={groups}
-            getOptionLabel={(option) => option.label}
+            getOptionLabel={(option) => option.name}
             sx={{ width: 300 }}
             noOptionsText="Aucun groupe correspondant"
             onChange={handleGroupChange}
             value={selectedGroup || null}
-            isOptionEqualToValue={(option, value) => option.value === value.value}
+            isOptionEqualToValue={(option, value) => option.code === value.code}
             renderInput={(params) => 
               <StyledTextField 
                 {...params}
