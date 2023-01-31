@@ -40,6 +40,7 @@ npm start
 
 Merci de lire les fichiers :
 * [CODE-OF-CONDUCT](https://github.com/MyEDTPlanner/MyEDTScrapper-Front/blob/19-ajout-dun-code-de-conduite/CODE-OF-CONDUCT.md)
+* [CONTRIBUTING](https://github.com/MyEDTPlanner/MyEDTScrapper-Front/blob/main/CONTRIBUTING.md)
 
 ## Auteurs
 N'hésitez pas à améliorer ce projet. N'oubliez pas de vous ajouter au fichier [AUTHORS](https://github.com/MyEDTPlanner/MyEDTScrapper-Front/blob/21-ajout-dun-fichier-AUTHORS/AUTHORS).
