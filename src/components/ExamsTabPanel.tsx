@@ -11,82 +11,43 @@ import {
     Alert,
     AlertTitle
 } from '@mui/material';
+import { EventInterface } from '../models/EventInterface';
+import { formatAttendeeName, formatTitleAbbreviation } from '../utils/format';
 
-export const ExamsTabPanel = () => {
+interface Props {
+    events: EventInterface[];
+}
+
+export const ExamsTabPanel = ({events}: Props) => {
     return (
         <Box sx={{ p: 3 }}>
             <Typography>Examens</Typography>
-            <Alert severity="success">
-        <AlertTitle>Success</AlertTitle>
-        This is a success alert <strong>check it out!</strong>
-      </Alert>
-            <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-                <ListItem alignItems="flex-start">
+            <List dense={true}>
+              {getEventExams(events).map((e) => (
+                <ListItem key={e.uuid}>
                     <ListItemAvatar>
-                    <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                        <Avatar>
+                            {formatTitleAbbreviation(e.title)}
+                        </Avatar>
                     </ListItemAvatar>
                     <ListItemText
-                    primary="Brunch this weekend?"
-                    secondary={
-                        <React.Fragment>
-                        <Typography
-                            sx={{ display: 'inline' }}
-                            component="span"
-                            variant="body2"
-                            color="text.primary"
-                        >
-                            Ali Connors
-                        </Typography>
-                        {" — I'll be in your neighborhood doing errands this…"}
-                        </React.Fragment>
-                    }
+                        primary={e.title}
+                        secondary={e.locations.join(', ') + ' - ' + e.attendees.map(name => formatAttendeeName(name)).join(', ')}
                     />
                 </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                    <ListItemAvatar>
-                    <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-                    </ListItemAvatar>
-                    <ListItemText
-                    primary="Summer BBQ"
-                    secondary={
-                        <React.Fragment>
-                        <Typography
-                            sx={{ display: 'inline' }}
-                            component="span"
-                            variant="body2"
-                            color="text.primary"
-                        >
-                            to Scott, Alex, Jennifer
-                        </Typography>
-                        {" — Wish I could come, but I'm out of town this…"}
-                        </React.Fragment>
-                    }
-                    />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                    <ListItemAvatar>
-                    <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
-                    </ListItemAvatar>
-                    <ListItemText
-                    primary="Oui Oui"
-                    secondary={
-                        <React.Fragment>
-                        <Typography
-                            sx={{ display: 'inline' }}
-                            component="span"
-                            variant="body2"
-                            color="text.primary"
-                        >
-                            Sandra Adams
-                        </Typography>
-                        {' — Do you have Paris recommendations? Have you ever…'}
-                        </React.Fragment>
-                    }
-                    />
-                </ListItem>
+                ))}
             </List>
         </Box>
     );
+}
+
+const getEventExams = (events: EventInterface[]) => {
+    console.log(events);
+    events = events.filter(event => 
+        event.type === "Examen"
+        //&& event.start
+        //&& event.start > new Date()
+    );
+    console.log(events);
+    return events;
 }

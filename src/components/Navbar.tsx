@@ -14,11 +14,14 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { SettingsTabPanel } from './SettingsTabPanel';
 import { PreviewTabPanel } from './PreviewTabPanel';
 import { ExamsTabPanel } from './ExamsTabPanel';
+import { EventInterface } from '../models/EventInterface';
 
 const drawerWidth = 360;
 type Props = {
     groups: any[];
+    events: EventInterface[];
     selectedGroup: any;
+    selectedEvent: EventInterface | null;
     handleGroupChange: (event: React.SyntheticEvent, value: any | Array<any>, reason: string) => void;
     settings : {
         showUniversityPresence: boolean;
@@ -27,7 +30,7 @@ type Props = {
     handleSettingsChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }; 
 
-export const Navbar = ({settings, groups, selectedGroup, handleGroupChange, handleSettingsChange}: Props) => {
+export const Navbar = ({settings, groups, selectedGroup, events, selectedEvent, handleGroupChange, handleSettingsChange }: Props) => {
   const [value, setValue] = React.useState(0);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -48,10 +51,10 @@ export const Navbar = ({settings, groups, selectedGroup, handleGroupChange, hand
         <Box sx={{ overflow: 'auto', display: 'flex', height: '100%', maxHeight: '100%', flexDirection: 'column'}}>
           <Box sx={{flexGrow: 1, overflow: 'auto' }} >
             <TabPanel value={value} index={0}>
-              <PreviewTabPanel />
+              <PreviewTabPanel selectedEvent={selectedEvent} />
             </TabPanel>
             <TabPanel value={value} index={1}>
-              <ExamsTabPanel />
+              <ExamsTabPanel events={events} />
             </TabPanel>
             <TabPanel value={value} index={2}>
               <SettingsTabPanel settings={settings} handleSettingsChange={handleSettingsChange} />

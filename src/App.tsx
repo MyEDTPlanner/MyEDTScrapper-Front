@@ -8,34 +8,11 @@ import { Navbar } from "./components/Navbar";
 import { Topbar } from "./components/Topbar";
 import { Calendar } from "./components/Calendar";
 import { retrieveGroups, retrieveEvents, refreshEventsData } from "./utils/database";
-//import CalendarCopy from "./components/CalendarCopy";
+import { EventInterface } from './models/EventInterface';
+import { GroupInterface } from './models/GroupInterface';
+import { SettingInterface } from './models/SettingInterface';
 
 import "./index.css";
-
-interface SettingsInterface {
-  showUniversityPresence: boolean;
-  showWeekends: boolean;
-};
-
-interface GroupInterface {
-  name: string;
-  code: string;
-};
-
-interface EventInterface {
-  start: string,
-  end: string,
-  title: string,
-  type: string,
-  description: string,
-  locations: string[],
-  attendees: string[],
-  groups: string[],
-  done: boolean,
-  presential: boolean,
-  code: string,
-  uuid: string,
-};
 
 const defaultSelectedGroup: GroupInterface = {name: "M2 Miage App", code: "M2MIAA"};
 const defaultGroups: GroupInterface[] = [
@@ -46,13 +23,13 @@ const defaultGroups: GroupInterface[] = [
   {name: "M1 Miage App", code: "M1MIAA"},
   {name: "M2 Miage App", code: "M2MIAA"}
 ];
-const defaultSettings: SettingsInterface = {
+const defaultSettings: SettingInterface = {
   showUniversityPresence: true,
   showWeekends: false
 };
 
 const App: FC = () => {
-  const [settings, setSettings] = useState<SettingsInterface>(defaultSettings);
+  const [settings, setSettings] = useState<SettingInterface>(defaultSettings);
   const [selectedGroup, setSelectedGroup] = useState<GroupInterface | null>(null);
   const [selectedEvent, setSelectedEvent] = useState<EventInterface | null>(null);
   const [groups, setGroups] = useState<GroupInterface[]>([]);
@@ -65,6 +42,7 @@ const App: FC = () => {
   }, []);
 
   const handleGroupChange = (event: React.SyntheticEvent, value: any | Array<any>, reason: string) => {
+    // TODO: Améliorer la gestion des groupes https://stackoverflow.com/questions/29020722/recursive-promise-in-javascript
     setSelectedGroup(value);
     retrieveEvents(value.code).then((events) => {
       if(events.length > 0) {
@@ -83,22 +61,25 @@ const App: FC = () => {
     setSettings({...settings, [event.target.name]: event.target.checked});
   };
 
+  const handleCurrentEventChange = (uuid: string) => {
+    const event = events.find((event) => event.uuid === uuid);
+    setSelectedEvent(event || null);
+  };
+
   return(
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <Topbar groups={groups} selectedGroup={selectedGroup} handleGroupChange={handleGroupChange} />
-      <Navbar settings={settings} groups={groups} selectedGroup={selectedGroup} handleGroupChange={handleGroupChange} handleSettingsChange={handleSettingsChange} />
+      <Navbar settings={settings} groups={groups} events={events} selectedGroup={selectedGroup} selectedEvent={selectedEvent} handleGroupChange={handleGroupChange} handleSettingsChange={handleSettingsChange} />
       <Box component="main" sx={{ flexGrow: 1, height: '100vh', display:'flex', flexDirection: 'column'}}>
         <Toolbar />
         <Box sx={{ flexGrow: 1, p: 3 }}>
-          <Calendar settings={settings} events={events} />
+          <Calendar settings={settings} events={events} handleCurrentEventChange={handleCurrentEventChange} />
         </Box>
       </Box>
     </Box>
   );
 };
-
-
 
 export default App;
 

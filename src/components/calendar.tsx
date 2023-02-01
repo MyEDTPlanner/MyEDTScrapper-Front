@@ -24,21 +24,9 @@ import frLocale from "@fullcalendar/core/locales/fr";
 import { Modal } from "./Modal";
 import tippy from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
+import { EventInterface } from '../models/EventInterface';
 
-interface EventInterface {
-  start: string,
-  end: string,
-  title: string,
-  type: string,
-  description: string,
-  locations: string[],
-  attendees: string[],
-  groups: string[],
-  done: boolean,
-  presential: boolean,
-  code: string,
-  uuid: string,
-};
+
 
 type CalendarProps = {
   events: EventInterface[];
@@ -46,9 +34,14 @@ type CalendarProps = {
       showUniversityPresence: boolean;
       showWeekends: boolean;
   };
+  handleCurrentEventChange: (uuid: string) => void;
 };
 
-export const Calendar = ({events, settings}: CalendarProps) => {
+export const Calendar = ({events, settings, handleCurrentEventChange}: CalendarProps) => {
+  const handleEventMouseEnter = (event: EventHoveringArg) => {
+    handleCurrentEventChange(event.event.extendedProps.uuid);
+  };
+
   return (
       <FullCalendar
         plugins={[
@@ -72,12 +65,10 @@ export const Calendar = ({events, settings}: CalendarProps) => {
         weekends={settings.showWeekends}
         events={events}
         eventDataTransform={handleEventColor}
-        //initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
-        //eventContent={renderEventContent} // custom render function
+        
+        eventContent={renderEventContent} // custom render function
         //eventClick={this.handleEventClick}
-        //eventMouseEnter={this.handleEventMouseEnter}
-        //eventDidMount={this.handleEventDidMount}
-        //eventsSet={this.handleEvents} // called after events are initialized/added/changed/removed
+        eventMouseEnter={handleEventMouseEnter}
         views={{
           customTimeGridWeek: {
             type: "timeGridWeek",
@@ -96,6 +87,9 @@ export const Calendar = ({events, settings}: CalendarProps) => {
           },
         }}
         /* you can update a remote database when these fire:
+        initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
+        eventDidMount={this.handleEventDidMount}
+        eventsSet={this.handleEvents} // called after events are initialized/added/changed/removed
         select={this.handleDateSelect}
         eventAdd={function(){}}
         eventChange={function(){}}
