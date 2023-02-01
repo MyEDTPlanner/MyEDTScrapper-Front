@@ -3,19 +3,15 @@ import { EventInput } from '@fullcalendar/react'
 let eventGuid = 0
 let todayStr = new Date().toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
 
-export const INITIAL_EVENTS: EventInput[] = [
+export const test: EventInput[] = [
   {
-    id: createEventId(),
+    id: "1",
     title: 'All-day event',
     start: todayStr
   },
   {
-    id: createEventId(),
+    id: "2",
     title: 'Timed event',
     start: todayStr + 'T12:00:00'
   }
 ]
-
-export function createEventId() {
-  return String(eventGuid++)
-}

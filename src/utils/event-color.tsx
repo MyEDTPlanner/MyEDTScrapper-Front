@@ -8,6 +8,9 @@ interface colorsType {
 
 const eventColor: colorsType = {
   Cours: {
+    //backgroundColor: "#edf7ed",
+    //borderColor: "#edf7ed",
+    //textColor: "#1e4620"
     backgroundColor: "#48cae4",
     borderColor: "#48cae4",
     textColor: "#000000",
@@ -33,7 +36,8 @@ const eventColor: colorsType = {
     textColor: "#000000",
   },
 };
-export function getEventColor(eventType: string) {
+
+export const getEventColor = (eventType: string) => {
   if (eventColor[eventType]) return eventColor[eventType];
   return eventColor.other;
 }
