@@ -4,32 +4,35 @@ MyEDTPlanner est une suite de module permettant la récupération et l'affichage
 
 ## Configuration
 
-Pour faire fonctionner ce projet, vous aller devoir remplir les variables d'environnements dans un fichier .env (utilisez le fichier example.env comme base et renomer le en .env)
+Pour faire fonctionner ce projet, vous aller devoir remplir les variables d'environnements dans un fichier .env (utilisez le fichier example.env comme base et renommer le en .env)
 
 Variables d'environnements :
 
 | Nom               | Description                      |
 |-------------------|----------------------------------|
-| REACT_APP_API_URL | http://localhost:2001            |
-
-Pour la réalisation de tests, il est également possible d'utiliser l'API fictive disponnible à l'adresse `http://api.myedtplanner.lichou.co` (le contenu retourné est toujours le même, évite de faire trop de récupération de données).
+| REACT_APP_API_URL | http://localhost:2000            |
 
 ## Installation
 
 Clone du projet
 ```bash
-git clone https://github.com/MyEDTPlanner/MyEDTScrapper-Front.git
+git clone https://github.com/MyEDTPlanner/MyEDTScrapper-Front.git Front
 ```
+
 
 Se rendre dans le répertoire du projet
 ```bash
-cd MyEDTScrapper-Front
+cd Front
 ````
 
 Installer les dépendances
 ```bash
 npm install
 ```
+
+
+N'ouliez pas de remplir le fichier ".env" comme indiqué précédemment.  
+
 
 Compiler les fichiers
 ```bash
@@ -39,12 +42,12 @@ npm start
 ## Contribution
 
 Merci de lire les fichiers :
-* [CODE-OF-CONDUCT](https://github.com/MyEDTPlanner/MyEDTScrapper-Front/blob/19-ajout-dun-code-de-conduite/CODE-OF-CONDUCT.md)
+* [CODE-OF-CONDUCT](https://github.com/MyEDTPlanner/MyEDTScrapper-Front/blob/main/CODE-OF-CONDUCT.md)
 * [CONTRIBUTING](https://github.com/MyEDTPlanner/MyEDTScrapper-Front/blob/main/CONTRIBUTING.md)
 
 ## Auteurs
-N'hésitez pas à améliorer ce projet. N'oubliez pas de vous ajouter au fichier [AUTHORS](https://github.com/MyEDTPlanner/MyEDTScrapper-Front/blob/21-ajout-dun-fichier-AUTHORS/AUTHORS).
+N'hésitez pas à améliorer ce projet. N'oubliez pas de vous ajouter au fichier [AUTHORS](https://github.com/MyEDTPlanner/MyEDTScrapper-Front/blob/main/AUTHORS.md).
 
 ## License
 
-Ce projet est sous la licence GNU GPL V3 - voir le fichier [license](https://github.com/MyEDTPlanner/MyEDTScrapper-Front/blob/14-ajout-dune-licence/License) pour plus de détails.
+Ce projet est sous la licence GNU GPL V3 - voir le fichier [license](https://github.com/MyEDTPlanner/MyEDTScrapper-Front/blob/main/License) pour plus de détails.
