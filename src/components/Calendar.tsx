@@ -20,7 +20,6 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
 import frLocale from "@fullcalendar/core/locales/fr";
-//import { INITIAL_EVENTS } from "../utils/event-utils";
 import { Modal } from "./Modal";
 import tippy from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
@@ -40,6 +39,10 @@ type CalendarProps = {
 export const Calendar = ({events, settings, handleCurrentEventChange}: CalendarProps) => {
   const handleEventMouseEnter = (event: EventHoveringArg) => {
     handleCurrentEventChange(event.event.extendedProps.uuid);
+  };
+
+  const handleEventsFiltering = (events: EventInterface[]) => {
+    return events.filter((e) => !e.universityPresence || settings.showUniversityPresence);
   };
 
   return (
@@ -63,7 +66,7 @@ export const Calendar = ({events, settings, handleCurrentEventChange}: CalendarP
         selectMirror={true}
         dayMaxEvents={true}
         weekends={settings.showWeekends}
-        events={events}
+        events={handleEventsFiltering(events)}
         eventDataTransform={handleEventColor}
         
         eventContent={renderEventContent} // custom render function
