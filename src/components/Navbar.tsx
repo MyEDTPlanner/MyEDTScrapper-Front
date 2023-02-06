@@ -15,6 +15,7 @@ import { SettingsTabPanel } from './SettingsTabPanel';
 import { PreviewTabPanel } from './PreviewTabPanel';
 import { ExamsTabPanel } from './ExamsTabPanel';
 import { EventInterface } from '../models/EventInterface';
+import { Height } from '@mui/icons-material';
 
 const drawerWidth = 360;
 type Props = {
@@ -90,7 +91,7 @@ function TabPanel(props: TabPanelProps) {
       {...other}
     >
       {value === index && (
-        <Box>
+        <Box sx={{height:"100%"}}>
           {children}
         </Box>
       )}

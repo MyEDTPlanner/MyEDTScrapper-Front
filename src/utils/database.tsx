@@ -17,3 +17,10 @@ export const refreshEventsData = async (code: string) => {
     console.log(data);
     return data.result;
 }
+
+export const refreshGroupsData = async () => {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/refresh/groups`);
+    const data = await response.json();
+    console.log(data);
+    return data.result;
+}
