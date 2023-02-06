@@ -31,15 +31,15 @@ export const ExamsTabPanel = ({ events }: Props) => {
             <ListItemText
               primary={e.title}
               secondary={
-                `${new Date(e.start).toLocaleDateString()} - ${new Date(
-                  e.start
-                ).toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })} -` +
-                e.locations.join(", ") +
-                " - " +
-                e.attendees.map((name) => formatAttendeeName(name)).join(", ")
+                [
+                  new Date(e.start).toLocaleDateString(),
+                  new Date(e.start).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  }),
+                  e.locations.join(", "),
+                  e.attendees.map((name) => formatAttendeeName(name)).join(", ")
+                ].filter(Boolean).join(' - ')
               }
             />
           </ListItem>
