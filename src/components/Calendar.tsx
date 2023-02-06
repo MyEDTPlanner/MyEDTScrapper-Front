@@ -119,7 +119,7 @@ const handleEventColor = (event: any | null) => {
 
 const renderEventContent = (eventContent: EventContentArg) => {
   return (
-    <>
+    <Box sx={{overflow: 'hidden', height: '100%', fontSize: '12px'}} >
       <b>{eventContent.timeText}</b>
       <br />
       <span>
@@ -128,7 +128,7 @@ const renderEventContent = (eventContent: EventContentArg) => {
       <br />
       {renderAttendees(eventContent.event.extendedProps.attendees)}
       {renderLocations(eventContent.event.extendedProps.locations)}
-    </>
+    </Box>
   );
 };
 
