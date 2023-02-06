@@ -123,7 +123,7 @@ const renderEventContent = (eventContent: EventContentArg) => {
       <b>{eventContent.timeText}</b>
       <br />
       <span>
-        {eventContent.event.extendedProps.type} - {eventContent.event.title}
+        {eventContent.event.extendedProps.type} - {eventContent.event.title.}
       </span>
       <br />
       {renderAttendees(eventContent.event.extendedProps.attendees)}
