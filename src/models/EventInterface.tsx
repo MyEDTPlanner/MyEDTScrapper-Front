@@ -10,6 +10,7 @@ export interface EventInterface {
         lastname: string | null
     }[],
     groups: string[],
+    universityPresence: boolean,
     done: boolean,
     presential: boolean,
     code: string,

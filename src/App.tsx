@@ -15,14 +15,7 @@ import { SettingInterface } from './models/SettingInterface';
 import "./index.css";
 
 const defaultSelectedGroup: GroupInterface = {name: "M2 Miage App", code: "M2MIAA"};
-const defaultGroups: GroupInterface[] = [
-  {name: "Groupe 1", code: "groupe1"},
-  {name: "Groupe 2", code: "groupe2"},
-  {name: "Groupe 3", code: "groupe3"},
-  {name: "L3 Miage App", code: "L3MIAA"},
-  {name: "M1 Miage App", code: "M1MIAA"},
-  {name: "M2 Miage App", code: "M2MIAA"}
-];
+const defaultGroups: GroupInterface[] = [];
 const defaultSettings: SettingInterface = {
   showUniversityPresence: true,
   showWeekends: false
@@ -44,18 +37,17 @@ const App: FC = () => {
   const handleGroupChange = (event: React.SyntheticEvent, value: any | Array<any>, reason: string) => {
     // TODO: Améliorer la gestion des groupes https://stackoverflow.com/questions/29020722/recursive-promise-in-javascript
     setSelectedGroup(value);
-    retrieveEvents(value.code).then((events) => {
-      if(events.length > 0) {
-        setEvents(events);
-      } else {
-        refreshEventsData(value.code).then((events) => {
-          console.log("Fin de récup des events pour le groupe " + value.code + ". Affichage des events");
-          retrieveEvents(value.code).then((events) => {
-            setEvents(events);
+    if(value !== null) {
+      retrieveEvents(value.code).then((events) => {
+        if(events.length > 0) {
+          setEvents(events);
+        } else {
+          refreshEventsData(value.code).then((result) => {
+              setEvents(result.events);
           });
-        });
-      }
-    });
+        }
+      });
+    }
   };
   const handleSettingsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSettings({...settings, [event.target.name]: event.target.checked});
