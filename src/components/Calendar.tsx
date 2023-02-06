@@ -85,7 +85,7 @@ export const Calendar = ({events, settings, handleCurrentEventChange, isEventRef
               buttonText: "Semaine",
               allDaySlot: false,
               slotMinTime: "08:00:00",
-              slotMaxTime: "17:00:00",
+              slotMaxTime: "18:00:00",
               expandRows: true,
               slotLabelInterval: "00:30:00",
               slotLabelFormat: {
