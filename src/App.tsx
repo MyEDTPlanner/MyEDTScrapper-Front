@@ -14,8 +14,6 @@ import { SettingInterface } from './models/SettingInterface';
 
 import "./index.css";
 
-const defaultSelectedGroup: GroupInterface = {name: "M2 Miage App", code: "M2MIAA"};
-const defaultGroups: GroupInterface[] = [];
 const defaultSettings: SettingInterface = {
   showUniversityPresence: true,
   showWeekends: false
@@ -27,6 +25,7 @@ const App: FC = () => {
   const [selectedEvent, setSelectedEvent] = useState<EventInterface | null>(null);
   const [groups, setGroups] = useState<GroupInterface[]>([]);
   const [events, setEvents] = useState<EventInterface[]>([]);
+  const [isEventRefreshInProgress, setIsEventRefreshInProgress] = useState<boolean>(false);
   
   useEffect(() => {
     retrieveGroups().then((groups) => {
@@ -35,15 +34,17 @@ const App: FC = () => {
   }, []);
 
   const handleGroupChange = (event: React.SyntheticEvent, value: any | Array<any>, reason: string) => {
-    // TODO: Améliorer la gestion des groupes https://stackoverflow.com/questions/29020722/recursive-promise-in-javascript
     setSelectedGroup(value);
     if(value !== null) {
+      setIsEventRefreshInProgress(true);
       retrieveEvents(value.code).then((events) => {
         if(events.length > 0) {
           setEvents(events);
+          setIsEventRefreshInProgress(false);
         } else {
           refreshEventsData(value.code).then((result) => {
               setEvents(result.events);
+              setIsEventRefreshInProgress(false);
           });
         }
       });
@@ -66,7 +67,7 @@ const App: FC = () => {
       <Box component="main" sx={{ flexGrow: 1, height: '100vh', display:'flex', flexDirection: 'column'}}>
         <Toolbar />
         <Box sx={{ flexGrow: 1, p: 3 }}>
-          <Calendar settings={settings} events={events} handleCurrentEventChange={handleCurrentEventChange} />
+          <Calendar settings={settings} events={events} handleCurrentEventChange={handleCurrentEventChange} isEventRefreshInProgress={isEventRefreshInProgress} />
         </Box>
       </Box>
     </Box>
