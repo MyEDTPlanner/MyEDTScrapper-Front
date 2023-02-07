@@ -82,25 +82,22 @@ function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
 
   return (
-    <div
+    <Box
       role="tabpanel"
       hidden={value !== index}
       id={`navbar-tabpanel-${index}`}
       aria-labelledby={`navbar-tab-${index}`}
       {...other}
+      sx={{ height: '100%', overflow: 'auto' }}
     >
-      {value === index && (
-        <Box>
-          {children}
-        </Box>
-      )}
-    </div>
+      {children}
+    </Box>
   );
 }
 
 function a11yProps(index: number) {
   return {
     id: `navbar-tab-${index}`,
-    'aria-controls': `navbar-tabpanel-${index}`,
+    'aria-controls': `navbar-tabpanel-${index}`
   };
 }
