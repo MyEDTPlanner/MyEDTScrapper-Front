@@ -50,13 +50,11 @@ export const ExamsTabPanel = ({ events }: Props) => {
 };
 
 const getEventExams = (events: EventInterface[]) => {
-  console.log(events);
   events = events.filter(
     (event) =>
       event.type === "Examen" &&
       event.start &&
       new Date(event.start) > new Date()
   );
-  console.log(events);
   return events;
 };

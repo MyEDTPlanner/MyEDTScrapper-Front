@@ -12,7 +12,7 @@ import { EventInterface } from './models/EventInterface';
 import { GroupInterface } from './models/GroupInterface';
 import { SettingInterface } from './models/SettingInterface';
 
-import "./index.css";
+import "./App.css";
 
 const defaultSettings: SettingInterface = {
   showUniversityPresence: true,
